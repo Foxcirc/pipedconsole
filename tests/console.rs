@@ -72,6 +72,7 @@ fn console_print() {
         second.print(&format!("Second: {:?} ", i)).unwrap();
     };
     
+    // println will cause it to flush
     first.println("First normal test end.").unwrap();
     second.println("Second normal test end.").unwrap();
     
@@ -101,6 +102,9 @@ fn console_small() {
         second.print(&format!("Second: {:?} ", i)).unwrap();
     };
     
+    first.flush().unwrap();
+    second.flush().unwrap();
+
     read!();
 }
 
@@ -128,6 +132,9 @@ fn console_slow() {
         second.print(&format!("Second: {:?} ", i)).unwrap();
         std::thread::sleep(std::time::Duration::from_millis(30));
     };
+
+    first.flush().unwrap();
+    second.flush().unwrap();
 
     read!();
 }

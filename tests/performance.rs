@@ -24,12 +24,12 @@ fn template() {
 fn perf_flush() {
     
     let console = Console::new("PERF_FLUSH").unwrap();
-    console.flush(); // warmup
+    console.flush().unwrap();// warmup
     
     let start = Instant::now();
     
     for _ in 0..TEST_RANGE {
-        console.flush();
+        console.flush().unwrap();
     };
     
     let duration = Instant::now() - start;

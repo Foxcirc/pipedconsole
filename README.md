@@ -31,6 +31,7 @@ println!("Your name is: {}", name); // main processe's console
 # Documentation and download
 
 Download the crate either directly through Cargo or visit [crates.io].
+
 More documentation can be found on [docs.rs].
 
 

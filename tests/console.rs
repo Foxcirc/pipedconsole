@@ -57,7 +57,7 @@ fn console_print() {
     
     let first = Console::new("TEST_PRINT_1").unwrap();
     let second = Console::new("TEST_PRINT_2").unwrap();
-    
+
     
     first.println("First normal test start.").unwrap();
     second.println("Second normal test start.").unwrap();
@@ -87,18 +87,18 @@ fn console_small() {
     let first = Console::new("TEST_PRINT_1").unwrap();
     let second = Console::new("TEST_PRINT_2").unwrap();
 
-    first.println(">");
+    first.println(">").unwrap();
 
-    first.println("Small test.");
+    first.println("Small test.").unwrap();
     
     for i in 0..TEST_PRINT_RANGE_SMALL {        
-        first.println(&i.to_string());
-        second.println(&i.to_string());
+        first.println(&i.to_string()).unwrap();
+        second.println(&i.to_string()).unwrap();
     };
     
     for i in 0..TEST_PRINT_RANGE_SMALL {
-        first.print(&format!("First: {:?} ", i));
-        second.print(&format!("Second: {:?} ", i));
+        first.print(&format!("First: {:?} ", i)).unwrap();
+        second.print(&format!("Second: {:?} ", i)).unwrap();
     };
     
     read!();
@@ -113,19 +113,19 @@ fn console_slow() {
     std::thread::sleep(std::time::Duration::from_millis(200));
     let second = Console::new("TEST_PRINT_SLOW_2").unwrap();
     
-    first.println("Slow test.");
+    first.println("Slow test.").unwrap();
 
     for i in 0..TEST_PRINT_RANGE_SLOW {        
-        first.println(&i.to_string());
+        first.println(&i.to_string()).unwrap();
         std::thread::sleep(std::time::Duration::from_millis(50));
-        second.println(&i.to_string());
+        second.println(&i.to_string()).unwrap();
         std::thread::sleep(std::time::Duration::from_millis(20));
     };
     
     for i in 0..TEST_PRINT_RANGE_SLOW {
-        first.print(&format!("First: {:?} ", i));
+        first.print(&format!("First: {:?} ", i)).unwrap();
         std::thread::sleep(std::time::Duration::from_millis(60));
-        second.print(&format!("Second: {:?} ", i));
+        second.print(&format!("Second: {:?} ", i)).unwrap();
         std::thread::sleep(std::time::Duration::from_millis(30));
     };
 
@@ -155,7 +155,7 @@ fn console_long_name() {
     };
     
     let console = Console::new(&name).unwrap();
-    console.println("This should have a long name!");
+    console.println("This should have a long name!").unwrap();
     
     read!();
 
@@ -173,7 +173,7 @@ fn console_long_message() {
 
     let console = Console::new("TEST_LONG_MESSAGE").unwrap();
   
-    console.println(&message);
+    console.println(&message).unwrap();
 
     read!();
 
@@ -183,13 +183,13 @@ fn console_long_message() {
 fn console_clone() {
 
     let first = Console::new("Oh, no I will be copied.").unwrap();
-    first.print("Hello ");
+    first.print("Hello ").unwrap();
 
     let second = first.clone();
-    second.println("world!");
+    second.println("world!").unwrap();
 
-    first.println("This should work.");
-    second.println("This must be the same console as before.");
+    first.println("This should work.").unwrap();
+    second.println("This must be the same console as before.").unwrap();
 
     read!();
 
@@ -201,7 +201,7 @@ fn console_other_thread() {
     std::thread::spawn(move || {
         
         let console = Console::new("TEST_OTHER_THREAD").unwrap();
-        console.println("I will be dropped!");
+        console.println("I will be dropped!").unwrap();
         // console.read_line(&mut String::new()).unwrap();
 
     });
@@ -216,12 +216,12 @@ fn console_read() {
     let first = Console::new("TEST_READ_1").unwrap();
     let second = Console::new("TEST_READ_2").unwrap();
 
-    first.print("Reading from first console: ");
+    first.print("Reading from first console: ").unwrap();
     // let mut buff = String::new();
     // first.read_line(&mut buff).unwrap();
     // println!("Result 1: {}", buff);
     
-    second.println("Reading from second console with newline:");
+    second.println("Reading from second console with newline:").unwrap();
     // let mut buff = String::new();
     // second.read_line(&mut buff).unwrap();
     // println!("Result 2: {}", buff);
@@ -243,7 +243,7 @@ fn console_pull() {
     let console = Console::new("TEST_PULL").unwrap();
 
     for _ in 0..TEST_PULL_RANGE {
-        console.print("Type here: ");
+        console.print("Type here: ").unwrap();
         // let mut buff = String::new();
         // console.read_line(&mut buff).unwrap();
         // println!("Result 1: {}", buff);
@@ -257,7 +257,7 @@ fn console_pull() {
 fn console_is_dead_ok() { // todo spawn thread so it is does not block when the console's reply get's stuck OR add overlapped I/O
 
     let console = Console::new("TEST_IS_DEAD_OK").unwrap();
-    console.println("Do not close this one.");
+    console.println("Do not close this one.").unwrap();
 
     read!();
 
@@ -269,7 +269,7 @@ fn console_is_dead_ok() { // todo spawn thread so it is does not block when the 
 fn console_is_dead_err() {
 
     let console = Console::new("TEST_IS_DEAD_ERR").unwrap();
-    console.println("Close this one.");
+    console.println("Close this one.").unwrap();
 
     read!();
 
@@ -281,8 +281,8 @@ fn console_is_dead_err() {
 fn console_flex() {
 
     let console = Console::new("TEST_IS_DEAD_ERR").unwrap();
-    console.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-    console.println("empty");
+    console.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").unwrap();
+    console.println("empty").unwrap();
 
     read!();
 

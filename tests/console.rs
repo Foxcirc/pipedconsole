@@ -4,14 +4,14 @@ use pipedconsole::*;
 fn console_basic() {
     
     let first = Console::new("This is a basic console.").unwrap();
-    first.print("Oh my god, ");
-    first.println("this message traveled through a named pipe, it should be just one line by now!");
-    first.println("This should be a new line.");
+    first.print("Oh my god, ").unwrap();
+    first.println("this message traveled through a named pipe, it should be just one line by now!").unwrap();
+    first.println("This should be a new line.").unwrap();
     
     let second = Console::new("This is another basic console.").unwrap();
-    second.print("Oh my god, ");
-    second.println("this message traveled through another pipe, it should be just one line by now!");
-    second.println("Woooow.");
+    second.print("Oh my god, ").unwrap();
+    second.println("this message traveled through another pipe, it should be just one line by now!").unwrap();
+    second.println("Woooow.").unwrap();
     
     read!();
 }
@@ -21,7 +21,7 @@ fn console_basic() {
 fn console_drop() {
 
     let console = Console::new("This console will be dropped.").unwrap();
-    console.println(r"Good bye. \oo/");
+    console.println(r"Good bye. \oo/").unwrap();
 
     read!();
     drop(console);
@@ -41,7 +41,7 @@ fn console_spam() {
         consoles.push(Console::new(&format!("Console {:?}", i)).unwrap());
     }
     for (i, console) in consoles.iter().enumerate() {
-        console.println(&format!("Hello from Console {:?}", i));
+        console.println(&format!("Hello from Console {:?}", i)).unwrap();
     }
 
     read!();

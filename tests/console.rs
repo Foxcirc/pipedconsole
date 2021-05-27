@@ -254,18 +254,6 @@ fn console_pull() {
 }
 
 #[test]
-fn console_is_dead_ok() { // todo spawn thread so it is does not block when the console's reply get's stuck OR add overlapped I/O
-
-    let console = Console::new("TEST_IS_DEAD_OK").unwrap();
-    console.println("Do not close this one.").unwrap();
-
-    read!();
-
-    // if console.is_dead() { panic!("console.is_dead => {:?}", console.is_dead()) }
-
-}
-
-#[test]
 fn console_is_dead_err() {
 
     let console = Console::new("TEST_IS_DEAD_ERR").unwrap();
@@ -274,17 +262,6 @@ fn console_is_dead_err() {
     read!();
 
     // if !console.is_dead() { panic!("console.is_dead => {:?}", console.is_dead()) }
-
-}
-
-#[test]
-fn console_flex() {
-
-    let console = Console::new("TEST_IS_DEAD_ERR").unwrap();
-    console.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").unwrap();
-    console.println("empty").unwrap();
-
-    read!();
 
 }
 

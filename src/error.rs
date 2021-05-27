@@ -14,7 +14,7 @@ pub enum ErrorKind {
 
 /// The main error type used by this crate.
 #[derive(Debug, Clone)]
-pub struct Error {
+pub struct ConsoleError {
     /// A message wich can be displayed to the user.
     pub message: String,
     /// The severity of the error.
@@ -23,7 +23,7 @@ pub struct Error {
     pub code: u32
 }
 
-impl std::fmt::Display for Error { 
+impl std::fmt::Display for ConsoleError { 
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("PipedConsole-Error")
             .field("message", &self.message)
@@ -33,7 +33,7 @@ impl std::fmt::Display for Error {
     }
 }
 
-impl std::error::Error for Error {}
+impl std::error::Error for ConsoleError {}
 
 #[derive(Debug, Clone)]
 pub(crate) enum InternalError {
@@ -46,4 +46,17 @@ pub(crate) enum InternalError {
         result: u32
     },
     OsError(u32)
+}
+
+impl Into<ConsoleError> for InternalError {
+    fn into(self) -> ConsoleError {
+        match self {
+            InternalError::CStringError => ConsoleError { message: "CString::new() failed.".into(), kind: ErrorKind::Error, code: 0 },
+            InternalError::FaultyWrite { expected: e, result: r} => ConsoleError { message: format!("The data is invalid. (Expected {} bytes but got {}.)", e, r), kind: ErrorKind::Warning, code: 0 },
+            InternalError::InvalidHandle => ConsoleError { message: "The (pipe) handle is invalid.".into(), kind: ErrorKind::Fatal, code: 2 },
+            InternalError::PipeBroken => ConsoleError { message: "The pipe to the worker process was closed.".into(), kind: ErrorKind::Fatal, code: 232 },
+            InternalError::MoreData => ConsoleError { message: "The last message could not be read completely.".into(), kind: ErrorKind::Warning, code: 234 },
+            InternalError::OsError(e) => ConsoleError { message: format!("Windows error {}.", e), kind: ErrorKind::Error, code: e },
+        }
+    }
 }

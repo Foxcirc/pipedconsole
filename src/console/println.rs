@@ -1,5 +1,5 @@
 
-use crate::error::Error as ConsoleError;
+use crate::error::ConsoleError;
 
 impl super::Console {
     /// Print a line to the extern console.

@@ -1,0 +1,9 @@
+[package]
+name = "pipedconsole"
+version = "0.1.2"
+authors = ["foxcirc"]
+edition = "2018"
+license = "MIT"
+
+[dependencies]
+winapi = { version = "0.3.9", features = ["winuser", "std", "errhandlingapi", "processthreadsapi", "winbase", "minwinbase", "handleapi", "namedpipeapi", "consoleapi", "processenv","fileapi"] }

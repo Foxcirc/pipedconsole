@@ -224,14 +224,15 @@ fn console_read() {
     let second = Console::new("TEST_READ_2").unwrap();
 
     first.print("Reading from first console: ").unwrap();
-    // let mut buff = String::new();
-    // first.read_line(&mut buff).unwrap();
-    // println!("Result 1: {}", buff);
+    first.flush().unwrap();
+    let mut buff = String::new();
+    first.read_line(&mut buff).unwrap();
+    println!("Result 1: {}", buff);
     
     second.println("Reading from second console with newline:").unwrap();
-    // let mut buff = String::new();
-    // second.read_line(&mut buff).unwrap();
-    // println!("Result 2: {}", buff);
+    let mut buff = String::new();
+    second.read_line(&mut buff).unwrap();
+    println!("Result 2: {}", buff);
     
     println!("Type here:");
     let mut buff = String::new();

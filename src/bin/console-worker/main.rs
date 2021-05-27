@@ -66,7 +66,7 @@ use std::{
     ptr::null_mut,
     io::Write
 };
-use com::{receive::*};
+use com::{receive::*, send::*};
 use error_functions::{error, warning};
 use error::InternalError;
 
@@ -130,6 +130,11 @@ fn main () {
                 '0' => continue,
                 '1' => std::io::stdout().flush().unwrap_or_else(|e| warning("Could not flush stdout.", e)),
                 '2' => std::io::stdout().write_all(command.as_bytes()).unwrap_or_else(|e| warning("Could not write to stdout. ({})", e)),
+                '3' => {
+                    let mut buffer = String::new();
+                    std::io::stdin().read_line(&mut buffer).unwrap_or_else(|e| { warning("Could not read line into buffer. ({})", e); 0 });
+                    send(pipe_handle, buffer).unwrap_or_else(|e| error(&format!("Could not send response to a \"read\" command: {:?}", e), "")); // error() can't format with Debug
+                },
                 _ => warning("Invalid controll character: ", controll)
             }
 

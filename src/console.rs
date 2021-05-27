@@ -3,6 +3,7 @@ pub(crate) mod new;
 pub(crate) mod print;
 pub(crate) mod println;
 pub(crate) mod flush;
+pub(crate) mod read_line;
 
 /// Used for printing and reading from an external console.
 /// 

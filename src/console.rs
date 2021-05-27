@@ -6,10 +6,8 @@ pub(crate) mod flush;
 
 /// Used for printing and reading from an external console.
 /// 
-/// # General
-/// 
 /// This struct is the main interaction point to a worker process you can controll using
-/// this struct's methods like [`println`] or everything else documented below.
+/// this struct's methods like [`mod@println`] or everything else documented here.
 /// 
 /// # Examples
 /// 
@@ -22,9 +20,9 @@ pub(crate) mod flush;
 /// my_console.println("What is your name?");
 /// 
 /// let mut name = String::new();
-/// my_console.read(&mut name)?
+/// my_console.read_to_string(&mut name)?
 /// 
-/// // Prints normally on the main thread.
+/// // Prints normally on the calling processe's console.
 /// println!("Your name is: {}", name);
 /// # Ok(())
 /// # }
@@ -42,15 +40,13 @@ pub(crate) mod flush;
 /// be added in future versions.
 /// 
 /// **Do not try to send this struct across threads in any way.** The handle to
-/// the pipe wich is owned by a [`Console`] cannot be inherited. This means every
-/// attempt on calling most if the [`Console`] specific functions in a new thread should fail.
+/// the pipe wich is owned by a [`Console`] can currently be inherited.
 #[derive(Debug, Clone)]
 pub struct Console {
     /// The process id of the worker process. You can use this to further interface with
     /// the process. You *can* shutdown the worker process using this, to ensure that
     /// it is closed "correctly" even if it get's stuck, although that souldn't happen under
     /// normal conditions.
-    /// See [`Console`] for more information.
     pub pid: u32,
     pipe: winapi::um::winnt::HANDLE,
 }

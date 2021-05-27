@@ -1,7 +1,6 @@
 // Copyright 2021 Foxcirc.
 //
-// Licensed under he MIT license
-// <LICENSE-MIT or https://opensource.org/licenses/MIT>
+// Licensed under the MIT license: https://opensource.org/licenses/MIT
 
 //! A process wich is listening for messages, to print, read or do other stuff.
 //! 
@@ -9,25 +8,30 @@
 //! 
 //! This is the code for the worker process, wich is run when calling the
 //! [`Console::new`] function.
-//! It will use the first command line argument wich is passed to it,
-//! as the name of a (named) pipe. Then it will create a new pipe and wait for
-//! a client to connect to it.
+//! It will create a named pipe and then wait for a client to connect
+//! to it.
+//! The name format for the pipe is `\\.\pipe\pipedconsole-%PID` (without escape slashes)
+//! and you can launch and connect it maually if you want so.
 //! 
 //! After a connection is established, this process will go inside an infinite
 //! loop ad listen for messages send over the pipe. If there is no
 //! other process left using the pipe, the worker process will close automaticly
-//! and exit with error code 0.
+//! and exit with code 0.
 //! 
 //! For more information about named pipes, see the [microsoft docs].
 //! 
-//! # More information
+//! # Syntax
 //! 
-//! One can connect multiple clients to a worker process and even launch their own
-//! process to controll the console.
+//! If you want to controll this process manually you need to send it
+//! specifiy commands after you've connected to the pipe.
 //! 
-//! For more documentation about the syntax, used to directly controll the process,
-//! see ... (i am going to write this some day, for now just append numbers in a 
-//! (0, 6) range to the end of your message and see what they do :P)
+//! You can append specific characters at the end of your message,
+//! depending on what character is found the program will do different
+//! things:
+//! - '0' will be ignored without an error
+//! - '1' will flush the `stdout` buffer
+//! - '2' will print the message without a newline
+//! - '3' will read from the console and send the result back trough the named pipe // todo
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipes
 //! 
@@ -64,7 +68,7 @@ use std::{
 };
 use com::{receive::*};
 use error_functions::{error, warning};
-use error::ReceiveError;
+use error::InternalError;
 
 #[doc(hidden)]
 fn main () {
@@ -108,9 +112,10 @@ fn main () {
 
             match receive(pipe_handle, message, 1024) {
                 Ok(_) => (),
-                Err(ReceiveError::MoreData) => (),
-                Err(ReceiveError::PipeBroken) => break,
-                Err(ReceiveError::Other(e)) => error("Os error {}", e)
+                Err(InternalError::MoreData) => (),
+                Err(InternalError::PipeBroken) => break,
+                Err(InternalError::OsError(e)) => error("Os error {}", e),
+                _ => unreachable!("receive returned something wrong")
             };
             
             let mut command = std::ffi::CStr::from_ptr(message)

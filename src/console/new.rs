@@ -29,10 +29,10 @@ impl super::Console {
     /// 
     /// ```rust
     /// use pipedconsole::Console;
-    /// # fn main() -> Result<(), u32> {
-    /// let my_console = Console::new("My console")?; // launches a new console window
+    /// # fn main() -> Result<(), pipedconsole::Error> {
+    /// let my_console = Console::new("My console")?; // creates a new console window
     /// 
-    /// my_console.println("Hello world!");
+    /// my_console.println("Hello world!")?;
     /// # Ok(())
     /// # }
     /// ```
@@ -41,7 +41,7 @@ impl super::Console {
     /// 
     /// This method creates a worker process using the [CreateProcess] function from `winapi`
     /// and then obtains a handle to the pipe by calling the [CreateFile] function.
-    /// For more information about the information in returned errors see **unimplemented** .
+    /// For more information about the information in returned errors see [`Error`]: pipedconsole::Error .
     /// 
     /// [CreateProcess]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
     /// [CreateFile]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea

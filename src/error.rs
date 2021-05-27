@@ -35,21 +35,15 @@ impl std::fmt::Display for Error {
 
 impl std::error::Error for Error {}
 
-#[derive(Debug)]
-pub(crate) enum SendError {
+#[derive(Debug, Clone)]
+pub(crate) enum InternalError {
     CStringError,
     PipeBroken,
+    MoreData,
     InvalidHandle,
     FaultyWrite {
         expected: u32, 
         result: u32
     },
     OsError(u32)
-}
-
-#[derive(Debug)]
-pub(crate) enum ReceiveError {
-    PipeBroken,
-    MoreData,
-    Other(u32)
 }

@@ -1,11 +1,10 @@
 // Copyright 2021 Foxcirc.
 //
-// Licensed under he MIT license
-// <LICENSE-MIT or https://opensource.org/licenses/MIT>
+// Licensed under he MIT license: https://opensource.org/licenses/MIT
 
 //! Create multiple consoles for a **windows** application.
 //! 
-//! This crate makes use of windows Named Pipes to enable a process // todo add hyperlink for named pipe
+//! This crate makes use of windows Named Pipes to enable a process
 //! to controll multiple consoles.
 //!  
 //! # Quick Overview
@@ -32,7 +31,7 @@
 //! my_console.println("What is your name?"); // seperate window
 //! 
 //! let mut name = String::new();
-//! my_console.read(&mut name).expect("Could not read from the console");
+//! my_console.read_to_string(&mut name).expect("Could not read from the console");
 //! println!("Your name is: {}", name); // main processe's console
 //! ```
 //! When the console object is dropped or the calling program exits, the console
@@ -45,8 +44,8 @@
 //! listening for commands to execute.
 //! 
 //! In order to interface to a console-worker process using another language etc. you can
-//! manually connect to the named pipe. For more information about this see the [`worker`]
-//! documentation.
+//! manually launch it and then connect to the named pipe wich is created. For more
+//! information about this see the [`worker`] documentation.
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/console/allocconsole
 

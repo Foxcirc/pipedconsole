@@ -21,7 +21,7 @@ pub(crate) unsafe fn receive(pipe_handle: *mut c_void, buffer: *mut i8, bytes_to
     let error = GetLastError();
     match error {
         0 => (),
-        0x6D => return Err(InternalError::PipeBroken),
+        0x6D => return Err(InternalError::PipeBroken), // todo this does not work
         0xEA => return Err(InternalError::MoreData),
         _ => return Err(InternalError::OsError(error))
     }

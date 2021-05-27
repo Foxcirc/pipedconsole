@@ -20,11 +20,11 @@ you can write to it or read a line.
 ```rust
 use pipedconsole::Console;
 
-let my_console = Console::new("My Console").expect("Failed to create a new console");
-my_console.println("What is your name?").expect("Failed to call println"); // a seperate console window
+let console = Console::new("My Console").expect("Failed to create a new console");
+console.println("What is your name?").expect("Failed to call println"); // a seperate console window
 
 let mut name = String::new();
-my_console.read(&mut name).expect("Failed to read from the console");
+console.read(&mut name).expect("Failed to read from the console");
 println!("Your name is: {}", name); // main processe's console
 ```
 

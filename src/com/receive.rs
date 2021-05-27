@@ -8,8 +8,6 @@ use crate::error::InternalError;
 #[allow(dead_code)]
 pub(crate) unsafe fn receive(pipe_handle: *mut c_void, buffer: *mut i8, bytes_to_read: u32) -> Result<u32, InternalError> {
 
-    // let buffer = vec![17; bytes_to_read as usize];
-
     let mut bytes_read = 0;
 
     ReadFile(
@@ -24,7 +22,7 @@ pub(crate) unsafe fn receive(pipe_handle: *mut c_void, buffer: *mut i8, bytes_to
     match error {
         0 => (),
         0x6D => return Err(InternalError::PipeBroken),
-        0xEA => return Err(InternalError::MoreData), // More data is available to read. This is handled later.
+        0xEA => return Err(InternalError::MoreData),
         _ => return Err(InternalError::OsError(error))
     }
 

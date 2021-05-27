@@ -1,3 +1,5 @@
+//! This is currently not used.
+
 use pipedconsole::*;
 use std::time::Instant;
 

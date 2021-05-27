@@ -48,9 +48,9 @@ pub(crate) enum InternalError {
     OsError(u32)
 }
 
-impl Into<ConsoleError> for InternalError {
-    fn into(self) -> ConsoleError {
-        match self {
+impl From<InternalError> for ConsoleError {
+    fn from(v: InternalError) -> ConsoleError {
+        match v {
             InternalError::CStringError => ConsoleError { message: "CString::new() failed.".into(), kind: ErrorKind::Error, code: 0 },
             InternalError::FaultyWrite { expected: e, result: r} => ConsoleError { message: format!("The data is invalid. (Expected {} bytes but got {}.)", e, r), kind: ErrorKind::Warning, code: 0 },
             InternalError::InvalidHandle => ConsoleError { message: "The (pipe) handle is invalid.".into(), kind: ErrorKind::Fatal, code: 2 },

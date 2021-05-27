@@ -59,4 +59,4 @@ pub(crate) mod error;
 mod console;
 
 pub use console::Console;
-pub use error::{Error, ErrorKind};
+pub use error::{ConsoleError as Error, ErrorKind};

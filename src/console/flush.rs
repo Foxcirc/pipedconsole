@@ -24,10 +24,9 @@ impl super::Console {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn flush(&self) -> Result<(), crate::Error> { unsafe {
-
-        send(self.pipe, "1".into()).ok();
-        Ok(()) // todo add error handling
-    } }
+    pub fn flush(&self) -> Result<(), crate::Error> { 
+        
+        unsafe { Ok(send(self.pipe, "1".into())?) }
+    }
 }
 

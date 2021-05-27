@@ -1,7 +1,4 @@
-use crate::{
-    com::send::send,
-    error::ConsoleError
-};
+use crate::com::send::send;
 
 impl super::Console {
     /// Print to the extern console.
@@ -23,16 +20,11 @@ impl super::Console {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn print<T: ToString>(&self, message: T) -> Result<(), ConsoleError> { 
-        unsafe {
+    pub fn print<T: ToString>(&self, message: T) -> Result<(), crate::Error> { 
 
-            let mut message = message.to_string();
-            message.push('2');
+        let mut message = message.to_string();
+        message.push('2');
 
-            match send(self.pipe, message) {
-                Ok(_) => Ok(()),
-                Err(e) => Err(e.into())
-            }
-        }
+        unsafe { Ok(send(self.pipe, message)?) }
     }
 }

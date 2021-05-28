@@ -22,7 +22,7 @@ impl super::Console {
     /// from the parent and then prints them.
     /// For more information about that see [`console-worker`].
     /// 
-    /// The console is closed automaticly when the returned [`Console`] is
+    /// The console is closed automaticly when the returned `Console` is
     /// dropped or your program exits.
     /// 
     /// # Examples
@@ -41,7 +41,7 @@ impl super::Console {
     /// 
     /// This method creates a worker process using the [CreateProcess] function from `winapi`
     /// and then obtains a handle to the pipe by calling the [CreateFile] function.
-    /// For more information about the information in returned errors see [`Error`]: pipedconsole::Error .
+    /// For more information about the information in returned errors see [`crate::Error`]: pipedconsole::Error .
     /// 
     /// [CreateProcess]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
     /// [CreateFile]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea

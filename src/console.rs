@@ -8,7 +8,7 @@ pub(crate) mod read_line;
 /// Used for printing and reading from an external console.
 /// 
 /// This struct is the main interaction point to a worker process you can controll using
-/// this struct's methods like [`mod@println`] or everything else documented here.
+/// this struct's methods like [`Self::println`] or everything else documented here.
 /// 
 /// # Examples
 /// 

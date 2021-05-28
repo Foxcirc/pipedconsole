@@ -7,7 +7,7 @@
 //! # What does it do?
 //! 
 //! This is the code for the worker process, wich is run when calling the
-//! [`Console::new`] function.
+//! `Console::new` function.
 //! It will create a named pipe and then wait for a client to connect
 //! to it.
 //! The name format for the pipe is `\\.\pipe\pipedconsole-%PID` (without escape slashes)

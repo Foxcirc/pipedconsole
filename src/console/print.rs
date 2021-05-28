@@ -4,7 +4,7 @@ impl super::Console {
     /// Print to the extern console.
     /// 
     /// To guarantee that the console is flushed one may call the
-    /// the [`flush`]: pipedconsole::Console::flush function when done printing.
+    /// the [`crate::Console::flush`] function when done printing.
     /// 
     /// ## Examples
     /// 

@@ -22,7 +22,7 @@
 //! 
 //! You can use the [`Console`] class to create a new console, after that
 //! you can write to it or read a line.
-//! The console also implements the `Read` and `Write` traits.
+//! In the future [`Console`] will also implement the `Read` and `Write` traits.
 //! 
 //! ```rust
 //! use pipedconsole::Console;
@@ -45,7 +45,7 @@
 //! 
 //! In order to interface to a console-worker process using another language etc. you can
 //! manually launch it and then connect to the named pipe wich is created. For more
-//! information about this see the [`worker`] documentation.
+//! information about this see the `worker` documentation.
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/console/allocconsole
 

@@ -8,7 +8,7 @@ impl super::Console {
     /// something, to ensure that is actually gets displayed correctly.
     /// 
     /// Usually this function only needs to be called after a call to
-    /// [`Console::print`]. (If no newline character is at the end of the message.)
+    /// [`crate::Console::print`]. (If no newline character is at the end of the message.)
     /// 
     /// # Examples
     /// 

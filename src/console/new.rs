@@ -14,6 +14,13 @@ use winapi::um::{
     errhandlingapi::GetLastError
 };
 
+use crate::{
+    error::InternalError,
+    ErrorKind
+};
+
+const PIPE_CONNECT_FAILED: &str = "Could not connect to the worker process's pipe.";
+
 impl super::Console {
     /// Creates a new Console object with the specified name.
     /// 
@@ -45,7 +52,7 @@ impl super::Console {
     /// 
     /// [CreateProcess]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
     /// [CreateFile]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
-    pub fn new(name: &str) -> Result<Self, u32> {
+    pub fn new(name: &str) -> Result<Self, crate::Error> {
 
         let mut startup_info = w_ptapi::STARTUPINFOA {
             cb: 0,
@@ -78,17 +85,21 @@ impl super::Console {
         unsafe {
             
             w_base::GetStartupInfoA(&mut startup_info);
-            startup_info.lpTitle = match CString::new(name) { Ok(v) => v.into_raw(), Err(_) => return Err(0) };
+            startup_info.lpTitle = match CString::new(name) {
+                 Ok(v) => v.into_raw(),
+                 Err(_) => return Err( InternalError::CStringError.into() )
+            };
+
             startup_info.cb = std::mem::size_of_val(&startup_info) as u32;
             
             // todo test path under non-test circumstances
             let process_name = match CString::new(r"target\debug\console-worker.exe") {
                 Ok(v) => v.into_raw(),
-                Err(_) => return Err(0)
+                Err(_) => return Err( InternalError::CStringError.into() )
             };
 
             // Create the worker process.
-            if w_ptapi::CreateProcessA(
+            w_ptapi::CreateProcessA(
                 process_name,
                 null_mut(),
                 null_mut::<w_mbase::SECURITY_ATTRIBUTES>(), 
@@ -99,7 +110,14 @@ impl super::Console {
                 null_mut::<i8>(),
                 &mut startup_info,
                 &mut process_info
-            ) == 0 { return Err(GetLastError()) };
+            );
+            
+            let result = GetLastError();
+            match result {
+                0 => (),
+                2..=3 => return Err( crate::Error { message: "The path to the console-worker.exe file is invalid.".into(), kind: ErrorKind::Error, code: GetLastError() } ),
+                _ => return Err( crate::Error { message: "The worker process could not be launched.".into(), kind: ErrorKind::Error, code: GetLastError() } )
+            };
 
             // Retake ownership of the CStrings so they can be deallocated.
             CString::from_raw(process_name);
@@ -107,14 +125,13 @@ impl super::Console {
 
             let pipe_name = match CString::new(r"\\.\pipe\pipedconsole-%PID".replace("%PID", &process_info.dwProcessId.to_string())) {
                 Ok(v) => v,
-                Err(_) => return Err(0)
+                Err(_) => return Err( InternalError::CStringError.into() )
             };
 
-            // Try to connect to the named pipe wich will be opened by the other process.
-
             let mut pipe_handle: *mut c_void = w_hapi::INVALID_HANDLE_VALUE;
-
-            for _ in 0..10 {
+            
+            // Try to connect to the named pipe wich will be opened by the other process.
+            for _ in 0..8 {
                 
                 pipe_handle = w_fapi::CreateFileA(
                     pipe_name.as_ptr(),
@@ -130,12 +147,12 @@ impl super::Console {
                 match result {
                     0x0 => break,
                     0x2 => std::thread::sleep(std::time::Duration::from_millis(5)),
-                    _ => return Err(result)
+                    _ => return Err( crate::Error { message: PIPE_CONNECT_FAILED.into(), kind: ErrorKind::Error, code: result } )
                 };
 
             };
 
-            if pipe_handle == w_hapi::INVALID_HANDLE_VALUE { return Err(GetLastError()); };
+            if pipe_handle == w_hapi::INVALID_HANDLE_VALUE { return Err( crate::Error { message: PIPE_CONNECT_FAILED.into(), kind: ErrorKind::Error, code: 5 /* INVALID_HANDLE */ } ); };
 
             w_hapi::CloseHandle(process_info.hThread);
             w_hapi::CloseHandle(process_info.hProcess);

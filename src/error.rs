@@ -9,6 +9,8 @@ pub enum ErrorKind {
     /// Various errors wich aren't really common, but can be fatal. (eg. CString::new() failure)
     Error,
     /// The `Console` cannot be used anymore and is useless. 
+    /// If you get this kind of error from the [`crate::Console::new()`] function, it is likely
+    /// you will not be able to create a Console in the future as well.
     Fatal,
 }
 

@@ -1,9 +1,30 @@
 [package]
 name = "pipedconsole"
-version = "0.1.2"
+
+description = "A rust crate for managing multiple consoles from one windows application (process)."
+keywords = ["win32", "winapi", "windows", "console", "terminal"]
+categories = ["command-line-utilities", "command-line-interface", "accessibility"]
+repository = "https://github.com/Foxcirc/pipedconsole"
+
 authors = ["foxcirc"]
+version = "0.1.2"
 edition = "2018"
+
 license = "MIT"
 
 [dependencies]
-winapi = { version = "0.3.9", features = ["winuser", "std", "errhandlingapi", "processthreadsapi", "winbase", "minwinbase", "handleapi", "namedpipeapi", "consoleapi", "processenv","fileapi"] }
+[dependencies.winapi]
+version = "0.3.8"
+features = [
+  "winuser",
+  "std",
+  "errhandlingapi",
+  "processthreadsapi",
+  "winbase",
+  "minwinbase",
+  "handleapi",
+  "namedpipeapi",
+  "consoleapi",
+  "processenv",
+  "fileapi",
+]

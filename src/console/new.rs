@@ -92,8 +92,11 @@ impl super::Console {
 
             startup_info.cb = std::mem::size_of_val(&startup_info) as u32;
             
-            // todo test path under non-test circumstances
-            let process_name = match CString::new(r"target\debug\console-worker.exe") {
+            let mut process_name = std::env::current_exe().expect("temporary expect");
+            process_name.pop();
+            process_name.push("console_worker.exe");
+            eprintln!("{:?}", &process_name);
+            let process_name = match CString::new(process_name.to_str().expect("temporary expect")) {
                 Ok(v) => v.into_raw(),
                 Err(_) => return Err( InternalError::CStringError.into() )
             };
@@ -115,7 +118,7 @@ impl super::Console {
             let result = GetLastError();
             match result {
                 0 => (),
-                2..=3 => return Err( crate::Error { message: "The path to the console-worker.exe file is invalid.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ),
+                2..=3 => return Err( crate::Error { message: "The path to the console_worker.exe file is invalid.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ),
                 _ => return Err( crate::Error { message: "The worker process could not be launched.".into(), kind: ErrorKind::Error, code: GetLastError() } )
             };
 

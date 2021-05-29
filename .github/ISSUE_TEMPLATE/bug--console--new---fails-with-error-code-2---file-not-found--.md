@@ -8,6 +8,10 @@ assignees: Foxcirc
 
 ---
 
+Usually this is caused by a unexpected build environment.
+This is because under the hood, the "build.rs" file actually does a lot of stuff
+It builds the "console_worker" and attempts to copy it to the default output directory.
+
 ** Did you build your project using "rustc" instead of cargo? **
 
 ** Please paste the command you used to build here. (E.g. "cargo run --bin myproject") **

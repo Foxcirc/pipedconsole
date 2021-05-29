@@ -95,7 +95,7 @@ impl super::Console {
             let mut process_name = std::env::current_exe().expect("temporary expect");
             process_name.pop();
             process_name.push("console_worker.exe");
-            eprintln!("{:?}", &process_name);
+
             let process_name = match CString::new(process_name.to_str().expect("temporary expect")) {
                 Ok(v) => v.into_raw(),
                 Err(_) => return Err( InternalError::CStringError.into() )

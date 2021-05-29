@@ -57,7 +57,6 @@ fn console_print() {
     
     let first = Console::new("TEST_PRINT_1").unwrap();
     let second = Console::new("TEST_PRINT_2").unwrap();
-
     
     first.println("First normal test start.").unwrap();
     second.println("Second normal test start.").unwrap();

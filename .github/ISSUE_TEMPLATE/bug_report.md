@@ -7,6 +7,8 @@ assignees: Foxcirc
 
 ---
 
+(Please take a look at "Bug: Console::new() failed with code 2 (File not found.)". If this is your problem you should use the other template.)
+
 **Describe the bug**
 A clear and concise description of what the bug is / what happend.
 

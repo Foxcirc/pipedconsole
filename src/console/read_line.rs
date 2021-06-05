@@ -19,7 +19,7 @@ impl super::Console {
     /// let my_console = Console::new()?;
     /// let mut buffer = String::new();
     /// 
-    /// my_console.read_to_string(&mut buffer)?;
+    /// my_console.read_line(&mut buffer)?;
     /// println!("You entered {}", &buffer);
     /// 
     /// # Ok(())

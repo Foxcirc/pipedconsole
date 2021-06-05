@@ -6,8 +6,6 @@ fn main() {
     //* cargo will call this build script again when building console_worker
     if std::env::var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING").is_ok() { return; };
 
-    // todo test with release builds
-
 	std::env::set_var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING", "");
 
     //* build the console-worker executable
@@ -20,7 +18,7 @@ fn main() {
                     String::from("error") //* trigger the other error message, since this is unusual for cargo
                 }
             };
-            // todo could this be triggered by something else (like a path)?
+            // todo could this be triggered by something else (like a weird path)?
             if out.contains("error") { //* an error occured
                 println!("cargo:warning=during the compilation of the console-worker executable cargo has thrown an error: {}", out)
             }

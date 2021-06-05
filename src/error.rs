@@ -39,7 +39,7 @@ impl std::error::Error for ConsoleError {}
 
 #[derive(Debug, Clone)]
 pub(crate) enum InternalError {
-    CStringError,
+    StringError,
     PipeBroken,
     MoreData,
     InvalidHandle,
@@ -53,7 +53,7 @@ pub(crate) enum InternalError {
 impl From<InternalError> for ConsoleError {
     fn from(v: InternalError) -> ConsoleError {
         match v {
-            InternalError::CStringError => ConsoleError { message: "CString::new() failed.".into(), kind: ErrorKind::Error, code: 0 },
+            InternalError::StringError => ConsoleError { message: "There was an error converting strings. Try to use only valid utf-8 characters.".into(), kind: ErrorKind::Error, code: 0 },
             InternalError::FaultyWrite { expected: e, result: r} => ConsoleError { message: format!("The data is invalid. (Expected {} bytes but got {}.)", e, r), kind: ErrorKind::Warning, code: 0 },
             InternalError::InvalidHandle => ConsoleError { message: "The (pipe) handle is invalid.".into(), kind: ErrorKind::Fatal, code: 2 },
             InternalError::PipeBroken => ConsoleError { message: "The pipe to the worker process was closed.".into(), kind: ErrorKind::Fatal, code: 232 },

@@ -10,7 +10,7 @@ pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<(
 
     let mut bytes_written = 0;
     let bytes_to_write = message.len() as u32;
-    let message = match CString::new(message) { Ok(v) => v, Err(_) => return Err(InternalError::CStringError) };
+    let message = match CString::new(message) { Ok(v) => v, Err(_) => return Err(InternalError::StringError) };
 
     WriteFile(
         pipe_handle,

@@ -127,7 +127,7 @@ impl super::Console {
             let result = GetLastError();
             match result {
                 0 => (),
-                2..=3 => return Err( crate::Error { message: "The path to the console_worker.exe file is invalid. Place console_worker.exe in the same directory as the calling executable.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ),
+                2..=3 => return Err( crate::Error { message: "File not found! Place \"console_worker.exe\" in the same directory as the calling executable.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ),
                 _ => return Err( crate::Error { message: "The worker process could not be launched.".into(), kind: ErrorKind::Error, code: GetLastError() } )
             };
 

@@ -22,7 +22,7 @@
 //! 
 //! You can use the [`Console`] class to create a new console, after that
 //! you can write to it or read a line.
-//! In the future [`Console`] will also implement the `Read` and `Write` traits.
+//! It is planned, that [`Console`] will also implement the `Read` and `Write` traits.
 //! 
 //! ```rust
 //! use pipedconsole::Console;
@@ -31,11 +31,27 @@
 //! my_console.println("What is your name?"); // seperate window
 //! 
 //! let mut name = String::new();
-//! my_console.read_to_string(&mut name).expect("Could not read from the console");
+//! my_console.read_line(&mut name).expect("Could not read from the console");
 //! println!("Your name is: {}", name); // main processe's console
 //! ```
 //! When the console object is dropped or the calling program exits, the console
 //! will close automaticly, unless another process also writes to it.
+//! 
+//! # Importand
+//! This crate comes with a build script wich tries to compile the `console_worker` executable.
+//! This script is important because cargo does not build binaries inside library crates, so
+//! it needs to be done manually.
+//! 
+//! For convenience the build script copies the `console_worker.exe` file, to where your binary
+//! file should be.
+//! 
+//! ** If you change the output location of `cargo` or use `rustc` you may experiance issues.
+//! If you cannot create a `Console` (end it returns "File not found!") please create an issue
+//! on github using the corresponding template.
+//! A quick fix is to copy the `console_worker.exe` file into the directory of the calling
+//! executable.
+//! You may clone the project and delete the `build.rs`, if the copying messes with your
+//! project structure. **
 //! 
 //! # Additional Information
 //! 

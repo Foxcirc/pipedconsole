@@ -8,7 +8,7 @@ repository = "https://github.com/Foxcirc/pipedconsole"
 readme = "README.md"
 
 authors = ["foxcirc"]
-version = "0.1.2"
+version = "0.0.1"
 edition = "2018"
 
 license = "MIT"

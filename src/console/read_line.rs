@@ -30,13 +30,13 @@ impl super::Console {
             send(self.pipe, "3".into())?;
             let buffer = match CString::new([17 as u8; 1024]) {
                 Ok(v) => v.into_raw(),
-                Err(_) => return Err( InternalError::CStringError.into() )
+                Err(_) => return Err( InternalError::StringError.into() )
             };
             let bytes_read = receive(self.pipe, buffer, 1024)?;
 
             match CString::from_raw(buffer).to_str() {
                 Ok(v) => target.push_str(&v.replace("\u{0011}", "")),
-                Err(_) => return Err( InternalError::CStringError.into() )
+                Err(_) => return Err( InternalError::StringError.into() )
             };
 
             Ok(bytes_read as usize)

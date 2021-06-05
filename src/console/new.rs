@@ -87,18 +87,27 @@ impl super::Console {
             w_base::GetStartupInfoA(&mut startup_info);
             startup_info.lpTitle = match CString::new(name) {
                  Ok(v) => v.into_raw(),
-                 Err(_) => return Err( InternalError::CStringError.into() )
+                 Err(_) => return Err( InternalError::StringError.into() )
             };
 
             startup_info.cb = std::mem::size_of_val(&startup_info) as u32;
             
-            let mut process_name = std::env::current_exe().expect("temporary expect");
+            let mut process_name = match std::env::current_exe() {
+                Ok(v) => v,
+                Err(e) => return Err( crate::Error { message: format!("Could not get the current executable's path: {}", e), kind: ErrorKind::Error, code: GetLastError() } )
+            };
+
             process_name.pop();
             process_name.push("console_worker.exe");
+            
+            let process_name = match process_name.to_str() {
+                Some(v) => v,
+                None => return Err( InternalError::StringError.into() )
+            };
 
-            let process_name = match CString::new(process_name.to_str().expect("temporary expect")) {
+            let process_name = match CString::new(process_name) {
                 Ok(v) => v.into_raw(),
-                Err(_) => return Err( InternalError::CStringError.into() )
+                Err(_) => return Err( InternalError::StringError.into() )
             };
 
             // Create the worker process.
@@ -118,7 +127,7 @@ impl super::Console {
             let result = GetLastError();
             match result {
                 0 => (),
-                2..=3 => return Err( crate::Error { message: "The path to the console_worker.exe file is invalid.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ),
+                2..=3 => return Err( crate::Error { message: "The path to the console_worker.exe file is invalid. Place console_worker.exe in the same directory as the calling executable.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ),
                 _ => return Err( crate::Error { message: "The worker process could not be launched.".into(), kind: ErrorKind::Error, code: GetLastError() } )
             };
 
@@ -128,7 +137,7 @@ impl super::Console {
 
             let pipe_name = match CString::new(r"\\.\pipe\pipedconsole-%PID".replace("%PID", &process_info.dwProcessId.to_string())) {
                 Ok(v) => v,
-                Err(_) => return Err( InternalError::CStringError.into() )
+                Err(_) => return Err( InternalError::StringError.into() )
             };
 
             let mut pipe_handle: *mut c_void = w_hapi::INVALID_HANDLE_VALUE;

@@ -25,24 +25,25 @@ fn main() {
                 println!("cargo:warning=during the compilation of the console-worker executable cargo has thrown an error: {}", out)
             }
         },
-        Err(err) => println!("cargo:warning=could not spawn rustc process for building the console-worker executable: {}", err)
+        Err(err) => println!("cargo:warning=could not spawn cargo process for building the console-worker executable: {}", err)
     }; 
 
     let mut source = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    let mut dest = PathBuf::from(std::env::var("OUT_DIR").unwrap());
+
     source.push("debug");
     source.push("console_worker.exe");
 
-    let mut dest = PathBuf::from(std::env::var("OUT_DIR").unwrap());
     dest.pop();
     dest.pop();
     dest.pop();
     dest.push("console_worker.exe");
-
+    
     println!(r"Attempting to copy from {:?} to {:?}", &source, &dest);
-
-    match std::fs::copy(source, dest) {
+    
+    match std::fs::copy(&source, &dest) {
         Ok(_) => (),
-        Err(e) => println!("cargo:warning=Could not copy \"console_worker.exe\" to the place where your executable file will be. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Original error: {}", e)
+        Err(e) => println!("cargo:warning=Could not copy {:?} to {:?}. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Error message: {}", source, dest, e)
     };
 
     println!("cargo:rerun-if-changed=build.rs");

@@ -6,7 +6,7 @@ fn main() {
     //* cargo will call this build script again when building console_worker
     if std::env::var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING").is_ok() { return; };
 
-    // todo test with reales builds
+    // todo test with release builds
 
 	std::env::set_var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING", "");
 
@@ -40,7 +40,7 @@ fn main() {
 
     println!(r"Attempting to copy from {:?} to {:?}", &source, &dest);
 
-    match std::fs::copy(source, dest) { // todo what if the crate is build in release mode
+    match std::fs::copy(source, dest) {
         Ok(_) => (),
         Err(e) => println!("cargo:warning=Could not copy \"console_worker.exe\" to the place where your executable file will be. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Original error: {}", e)
     };

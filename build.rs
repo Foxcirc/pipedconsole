@@ -3,6 +3,10 @@ use std::path::PathBuf;
 
 fn main() -> u32 {
 
+    macro_rules! abort {
+        () => { std::process::exit(1); }
+    }
+
     //* cargo will call this build script again when building console_worker
     if std::env::var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING").is_ok() { return; };
 	std::env::set_var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING", "");
@@ -63,8 +67,4 @@ fn main() -> u32 {
     };
     
     println!("cargo:rerun-if-env-changed=PCAUTOCOPY");    
-}
-
-macro_rules! abort {
-    () => { std::process::exit(1); }
 }

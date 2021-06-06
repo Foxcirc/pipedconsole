@@ -21,12 +21,12 @@ fn main() {
             };
             // todo could this be triggered by something else (like a weird path)?
             if out.contains("error") { //* an error occured
-                println!("cargo:warning=during the compilation of the console_worker executable cargo has thrown an error: {}", out)
+                println!("cargo:warning=during the compilation of the console_worker executable cargo has thrown an error: {}", out);
                 abort!();
             }
         },
         Err(err) => {
-            println!("cargo:warning=could not spawn cargo process for building the console-worker executable: {}", err)
+            println!("cargo:warning=could not spawn cargo process for building the console-worker executable: {}", err);
             abort!();   
         }
     };
@@ -50,7 +50,7 @@ fn main() {
             match std::fs::copy(&source, &dest) {
                 Ok(_) => (),
                 Err(e) => {
-                    println!("cargo:warning=Could not copy {:?} to {:?}. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Error message: {}", source, dest, e)
+                    println!("cargo:warning=Could not copy {:?} to {:?}. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Error message: {}", source, dest, e);
                     abort!();
                 }
             };

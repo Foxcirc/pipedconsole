@@ -65,6 +65,7 @@ fn main() {
     println!("cargo:rerun-if-env-changed=PCAUTOCOPY");    
 }
 
+#[macro_export]
 macro_rules! abort {
     () => {
         std::process::exit(1);

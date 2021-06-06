@@ -1,7 +1,7 @@
 use std::process::Command;
 use std::path::PathBuf;
 
-fn main() -> u32 {
+fn main() {
 
     //* cargo will call this build script again when building console_worker
     if std::env::var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING").is_ok() { return; };
@@ -21,13 +21,13 @@ fn main() -> u32 {
             };
             // todo could this be triggered by something else (like a weird path)?
             if out.contains("error") { //* an error occured
-                println!("cargo:warning=during the compilation of the console_worker executable cargo has thrown an error: {}", out)
+                println!("cargo:warning=during the compilation of the console_worker executable cargo has thrown an error: {}", out);
                 abort!();
             }
         },
         Err(err) => {
             println!("cargo:warning=could not spawn cargo process for building the console-worker executable: {}", err);
-            abort!();
+            abort!();   
         }
     };
 
@@ -50,7 +50,7 @@ fn main() -> u32 {
             match std::fs::copy(&source, &dest) {
                 Ok(_) => (),
                 Err(e) => {
-                    println!("cargo:warning=Could not copy {:?} to {:?}. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Error message: {}", source, dest, e)
+                    println!("cargo:warning=Could not copy {:?} to {:?}. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Error message: {}", source, dest, e);
                     abort!();
                 }
             };
@@ -65,7 +65,8 @@ fn main() -> u32 {
     println!("cargo:rerun-if-env-changed=PCAUTOCOPY");    
 }
 
-#[macro_export]
 macro_rules! abort {
-    () => { std::process::exit(1); }
+    () => {
+        std::process::exit(1);
+    };
 }

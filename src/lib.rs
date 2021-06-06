@@ -42,23 +42,26 @@
 //! This script is important because cargo does not build binaries inside library crates, so
 //! it needs to be done manually.
 //! 
-//! If the build script has succesfully built the `console_worker` binary, it will display
-//! a warning wich contains the file location of the executable and some other useful information.
+//! If the build script runs for the first time, it will likely display an error. This is intended!
 //! 
-//! ** Please copy the `console_worker.exe` file into the directory where the executable(s) wich is(are)
-//! calling `Console::new()` are located. ** This is likely `your_dir\target\debug` or `your_dir\target
-//! \release` when building in release mode. You can disable the warning by specifying the `PCAUTOCOPY`
-//! environment variable.
-//! - `set PCAUTOCOPY=ignore` will disable the warning. Do this after copying the file manually.
-//! - `set PCAUTOCOPY=path/to/your/target/dir` will make the build script copy the `console_worker.exe` file into the specified directory.
+//! ** Please copy the `console_worker.exe` file into the directory where the executable
+//! calling `Console::new()` is located. ** This is likely `your_dir\target\debug` or `your_dir\target
+//! \release` when building in release mode. 
+//! 
+//! If you are done copying, you can disable the error by:
+//! - Setting the `PIPEDCONSOLE_COPY_DONE` environment variable.
+//! - Creating a specific file.
+//! 
+//! ** More inforation about the paths (E.g. where to create the file^^) is included in the error message. **
 //! 
 //! If you experience any issues with the system or have any ideas how to improve it, to make it more
-//! convenient to use, please create a feature request or pull request in `github`.
+//! convenient to use, please create a feature request or pull request on `github` using the `build script
+//! improvement` template.
 //! 
 //! # Additional Information
 //! 
 //! Creating a new [`Console`] **will create a new seperate process**. That means you will
-//! see a "console-worker" process in your task manager. That process is just the console
+//! see a "console_worker" process in your task manager. That process is just the console
 //! listening for commands to execute.
 //! 
 //! In order to interface to a console-worker process using another language etc. you can

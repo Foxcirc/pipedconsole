@@ -24,7 +24,7 @@ let console = Console::new("My Console").expect("Failed to create a new console"
 console.println("What is your name?").expect("Failed to call println"); // a seperate console window
 
 let mut name = String::new();
-console.read_to_string(&mut name).expect("Failed to read from the console");
+console.read_line(&mut name).expect("Failed to read from the console");
 println!("Your name is: {}", name); // main processe's console
 ```
 

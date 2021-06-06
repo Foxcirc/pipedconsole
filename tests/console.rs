@@ -250,10 +250,10 @@ fn console_pull() {
     let console = Console::new("TEST_PULL").unwrap();
 
     for _ in 0..TEST_PULL_RANGE {
-        console.print("Type here: ").unwrap();
-        // let mut buff = String::new();
-        // console.read_line(&mut buff).unwrap();
-        // println!("Result 1: {}", buff);
+        console.println("Type here: ").unwrap();
+        let mut buff = String::new();
+        console.read_line(&mut buff).unwrap();
+        println!("Result: {}", buff);
     };
 
     println!("End of test!");

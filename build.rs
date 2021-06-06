@@ -16,18 +16,18 @@ fn main() {
                 Ok(v) => v,
                 Err(e) => {
                     println!("cargo:warning=could not compile console_worker: the output of cargo did contain invalid utf-8: {}", e);
-                    abort!();
+                    std::process::exit(1);
                 }
             };
             // todo could this be triggered by something else (like a weird path)?
             if out.contains("error") { //* an error occured
                 println!("cargo:warning=during the compilation of the console_worker executable cargo has thrown an error: {}", out);
-                abort!();
+                std::process::exit(1);
             }
         },
         Err(err) => {
             println!("cargo:warning=could not spawn cargo process for building the console-worker executable: {}", err);
-            abort!();   
+            std::process::exit(1);   
         }
     };
 
@@ -51,7 +51,7 @@ fn main() {
                 Ok(_) => (),
                 Err(e) => {
                     println!("cargo:warning=Could not copy {:?} to {:?}. Please make sure, that \"console_worker.exe\" is in the same directory as the executable calling it! Error message: {}", source, dest, e);
-                    abort!();
+                    std::process::exit(1);
                 }
             };
         }
@@ -59,15 +59,8 @@ fn main() {
     }
     else {
         println!("cargo:warning=Please copy \"{}\\debug\\console_worker.exe\" into the directory where your executable is located. If you want to copy automaticly please set the \"PCAUTOCOPY\" environment vriable to the destination folder For more information check out docs.rs. If you want to just disable this warning, set the \"PCAUTOCOPY\" environment variable to \"ignore\". (E.g \"set PCAUTOCOPY=path/to/your/exe/dir\" to automaticly copy or \"set PCAUTOCOPY=ignore\" to just disabe the warning) You only need to copy once at the beginning or after you changed the location of your files. Just make sure \"console_worker.exe\" is in the same directory as the executable calling it.", &out_dir);
-        abort!();
+        std::process::exit(1);
     };
     
     println!("cargo:rerun-if-env-changed=PCAUTOCOPY");    
-}
-
-#[macro_export]
-macro_rules! abort {
-    () => {
-        std::process::exit(1);
-    };
 }

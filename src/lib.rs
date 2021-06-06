@@ -42,16 +42,18 @@
 //! This script is important because cargo does not build binaries inside library crates, so
 //! it needs to be done manually.
 //! 
-//! For convenience the build script copies the `console_worker.exe` file, to where your binary
-//! file should be.
+//! If the build script has succesfully built the `console_worker` binary, it will display
+//! a warning wich contains the file location of the executable and some other useful information.
 //! 
-//! ** If you change the output location of `cargo` or use `rustc` you may experiance issues.
-//! If you cannot create a `Console` (end it returns "File not found!") please create an issue
-//! on github using the corresponding template.
-//! A quick fix is to copy the `console_worker.exe` file into the directory of the calling
-//! executable.
-//! You may clone the project and delete the `build.rs`, if the copying messes with your
-//! project structure. **
+//! ** Please copy the `console_worker.exe` file into the directory where the executable(s) wich is(are)
+//! calling `Console::new()` are located. ** This is likely `your_dir\target\debug` or `your_dir\target
+//! \release` when building in release mode. You can disable the warning by specifying the `PCAUTOCOPY`
+//! environment variable.
+//! - `set PCAUTOCOPY=ignore` will disable the warning. Do this after copying the file manually.
+//! - `set PCAUTOCOPY=path/to/your/target/dir` will make the build script copy the `console_worker.exe` file into the specified directory.
+//! 
+//! If you experience any issues with the system or have any ideas how to improve it, to make it more
+//! convenient to use, please create a feature request or pull request in `github`.
 //! 
 //! # Additional Information
 //! 

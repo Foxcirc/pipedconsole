@@ -50,7 +50,7 @@
 //! 
 //! If you are done copying, you can disable the error by:
 //! - Setting the `PIPEDCONSOLE_COPY_DONE` environment variable.
-//! - Creating a specific file.
+//! - Creating a specific file. (see below)
 //! 
 //! ** More inforation about the paths (E.g. where to create the file^^) is included in the error message. **
 //! 

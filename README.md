@@ -1,6 +1,17 @@
 
 # Pipedconsole
 
+Currently docs.rs isn't working correctly!!!
+This has to do with the building, the build will fail if you
+build for the first time!
+The problem is that docs.rs complains about this.
+(In general it's not easy to ship a binary with your crate, wich
+is build for every user individually.)
+**
+I am very sorry for that and I am going to fix it ASAP,
+so there can be proper documentation!!
+**
+
 A rust crate for managing multiple consoles from one **windows** application.
 
 Normaly a program running on windows can only use one console.

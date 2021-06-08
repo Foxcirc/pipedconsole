@@ -5,6 +5,7 @@ description = "A rust crate for managing multiple consoles from one windows appl
 keywords = ["win32", "winapi", "windows", "console", "terminal"]
 categories = ["command-line-utilities", "command-line-interface", "accessibility"]
 repository = "https://github.com/Foxcirc/pipedconsole"
+documentation = "https://docs.rs/crate/pipedconsole/0.0.1"
 readme = "README.md"
 
 authors = ["foxcirc"]

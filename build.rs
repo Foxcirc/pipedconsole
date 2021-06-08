@@ -1,6 +1,9 @@
 use std::process::Command;
 
 fn main() {
+
+    if std::env::var("DOCS_RS").is_ok() { return; } //* the script fails on docs.rs
+
     //* cargo will call this build script again when building console_worker
     if std::env::var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING").is_ok() { return; };
 	std::env::set_var("CONSOLE_BUILD_SCRIPT_ALREADY_RUNNING", "");

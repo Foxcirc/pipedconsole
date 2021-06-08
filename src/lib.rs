@@ -39,10 +39,11 @@
 //! 
 //! # Importand
 //! This crate comes with a build script wich tries to compile the `console_worker` executable.
+//! You need to have the `cargo` command usable in order for it to work.
 //! This script is important because cargo does not build binaries inside library crates, so
 //! it needs to be done manually.
 //! 
-//! If the build script runs for the first time, it will likely display an error. This is intended!
+//! If the build script runs for the first time, it will display an error message. This is intended!
 //! 
 //! ** Please copy the `console_worker.exe` file into the directory where the executable
 //! calling `Console::new()` is located. ** This is likely `your_dir\target\debug` or `your_dir\target

@@ -7,7 +7,7 @@ fn main() {
     
     let out_dir = std::env::var("OUT_DIR").unwrap();
 
-    println!("cargo:rerun-if-env-changed=PCAUTOCOPY");    
+    println!("cargo:rerun-if-env-changed=PIPEDCONSOLE_COPY_DONE");    
     println!("cargo:rerun-if-changed={}\\PIPEDCONSOLE_COPY_DONE.txt", &out_dir);    
 
     //* check if the user already copied the file
@@ -22,7 +22,7 @@ fn main() {
                         If you are done copying please set the \"PIPEDCONSOLE_COPY_DONE\" environment variable or create this file: {}\\PIPEDCONSOLE_COPY_DONE.txt", 
         &out_dir, &out_dir
     );
-    
+
     //* build the console-worker executable
     match Command::new("cargo").args(&["build", "--bin", "console_worker", "--target-dir", &out_dir]).output() {
         Ok(out) => {

@@ -11,22 +11,28 @@ fn main() {
     let out_dir = std::env::var("OUT_DIR").unwrap();
 
     println!("cargo:rerun-if-env-changed=PIPEDCONSOLE_COPY_DONE");    
-    println!("cargo:rerun-if-changed={}\\PIPEDCONSOLE_COPY_DONE.txt", &out_dir);    
+    println!("cargo:rerun-if-changed={}\\PIPEDCONSOLE_COPY_DONE.txt", &out_dir);
+
+    let variable = std::env::var("PIPEDCONSOLE_COPY_DONE").is_ok();
+    let file = std::fs::File::open(out_dir.clone() + "\\PIPEDCONSOLE_COPY_DONE.txt").is_ok();
+
+    println!("Environment found: {:?}", variable);
+    println!("Signal file found: {}", file);
 
     //* check if the user already copied the file
-    if std::env::var("PIPEDCONSOLE_COPY_DONE").is_ok() || std::fs::File::open(out_dir.clone() + "\\PIPEDCONSOLE_COPY_DONE.txt").is_ok() {
-        return;
-    };
+    if variable || file { return; };
 
     println!(
         "cargo:warning= <<<--------------    READ FROM HERE    -------------->>>\
                         Please copy \"{}\\debug\\console_worker.exe\" into the directory where your executable is located.\
                         The \"console_worker.exe\" file must be in the same directory as any executable calling the \"Console::new()\" function.\
-                        If you are done copying please set the \"PIPEDCONSOLE_COPY_DONE\" environment variable or create this file: {}\\PIPEDCONSOLE_COPY_DONE.txt", 
+                        If you are done copying please set the \"PIPEDCONSOLE_COPY_DONE\" environment variable or create this file: {}\\PIPEDCONSOLE_COPY_DONE.txt \
+                        If you cannot find the file, make sure that \"cargo --version\" works. You can always create an issue on github if neither of this \
+                        options work for you.", 
         &out_dir, &out_dir
     );
 
-    //* build the console-worker executable
+    //* otherwise build the console-worker executable
     match Command::new("cargo").args(&["build", "--bin", "console_worker", "--target-dir", &out_dir]).output() {
         Ok(out) => {
             let out = match String::from_utf8(out.stderr) {

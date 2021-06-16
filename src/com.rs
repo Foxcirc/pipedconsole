@@ -4,5 +4,5 @@
 //! 
 //! You should not be able to visit this in the docs.
 
-#[path = r"com\send.rs"] pub(crate) mod send;
-#[path = r"com\receive.rs"] pub(crate) mod receive;
+#[path = r"com/send.rs"] pub(crate) mod send;
+#[path = r"com/receive.rs"] pub(crate) mod receive;

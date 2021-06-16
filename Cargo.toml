@@ -5,11 +5,11 @@ description = "Piped console is a (currently windows-only) rust crate wich allow
 keywords = ["win32", "winapi", "windows", "console", "terminal"]
 categories = ["command-line-utilities", "command-line-interface", "accessibility"]
 repository = "https://github.com/Foxcirc/pipedconsole"
-documentation = "https://docs.rs/crate/pipedconsole/0.0.2"
+documentation = "https://docs.rs/crate/pipedconsole/0.1.1"
 readme = "README.md"
 
 authors = ["foxcirc"]
-version = "0.1.0"
+version = "0.1.2"
 edition = "2018"
 
 license = "MIT"

@@ -71,19 +71,16 @@
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/console/allocconsole
 
+#![cfg(windows)]
+
 #![deny(missing_docs)]
 #![warn(missing_doc_code_examples)]
 #![deny(missing_debug_implementations)]
 
 #[doc(hidden)]
-#[cfg(windows)]
 pub(crate) mod com;
-#[cfg(windows)]
 pub(crate) mod error;
-#[cfg(windows)]
 mod console;
 
-#[cfg(windows)]
 pub use console::Console;
-#[cfg(windows)]
 pub use error::{ConsoleError as Error, ErrorKind};

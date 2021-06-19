@@ -1,6 +1,4 @@
 
-#![cfg(windows)]
-
 //! This is an internal module, used for communication
 //! through a pipe using the [`send`] and [`receive`] function.
 

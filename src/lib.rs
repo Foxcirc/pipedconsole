@@ -37,7 +37,7 @@
 //! When the console object is dropped or the calling program exits, the console
 //! will close automaticly, unless another process also writes to it.
 //! 
-//! # Importand
+//! # Important
 //! This crate comes with a build script wich tries to compile the `console_worker` executable.
 //! You need to have the `cargo` command usable in order for it to work.
 //! This script is important because cargo does not build binaries inside library crates, so
@@ -70,8 +70,6 @@
 //! information about this see the `worker` documentation.
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/console/allocconsole
-
-#![cfg(windows)]
 
 #![deny(missing_docs)]
 #![warn(missing_doc_code_examples)]

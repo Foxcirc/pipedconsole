@@ -45,7 +45,7 @@ correctly...
 
 While you _can_ use any version of this crate, the newer versions contains some
 documentation improvements and spelling corrections.
-Overall there aren't any bigger differences between 0.1.0 -> 0.1.4.
+Overall there aren't any bigger differences between 0.1.0 -> 0.2.0
 
 [docs.rs]: https://docs.rs
 [crates.io]: https://crates.io

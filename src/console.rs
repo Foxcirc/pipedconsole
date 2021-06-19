@@ -49,5 +49,5 @@ pub struct Console {
     /// it is closed "correctly" even if it get's stuck, although that souldn't happen under
     /// normal conditions.
     pub pid: u32,
-    pipe: winapi::um::winnt::HANDLE,
+    pipe: *mut std::ffi::c_void,
 }

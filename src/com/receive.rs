@@ -1,11 +1,18 @@
 
-use std::ffi::c_void;
+#[cfg(windows)]
 use winapi::um::{fileapi::ReadFile, errhandlingapi::GetLastError};
+
+use std::ffi::c_void;
 use crate::error::InternalError;
 
-/// Provides an abstraction over ReadFile. (private function)
+#[cfg(linux)]
+pub(crate) unsafe fn receive(pipe_handle: *mut c_void, buffer: *mut i8, bytes_to_read: u32) -> Result<u32, InternalError> {
+    Ok(0)
+}
+
 // This code is used.
 #[allow(dead_code)]
+#[cfg(windows)]
 pub(crate) unsafe fn receive(pipe_handle: *mut c_void, buffer: *mut i8, bytes_to_read: u32) -> Result<u32, InternalError> {
 
     let mut bytes_read = 0;

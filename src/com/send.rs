@@ -1,11 +1,18 @@
 
+#[cfg(windows)]
 use winapi::um::{fileapi::WriteFile, errhandlingapi::GetLastError};
+
 use std::ffi::{CString, c_void};
 use crate::error::InternalError;
 
-/// Sends data through a pipe. (private function)
+#[cfg(linux)]
+pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<(), InternalError> {
+    Ok(())
+}
+
 // This code is used.
 #[allow(dead_code)]
+#[cfg(windows)]
 pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<(), InternalError> {
 
     let mut bytes_written = 0;

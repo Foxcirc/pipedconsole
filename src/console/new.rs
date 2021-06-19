@@ -4,6 +4,7 @@ use std::{
     ffi::{CString, c_void}
 };
 
+#[cfg(windows)]
 use winapi::um::{
     processthreadsapi as w_ptapi,
     winbase as w_base,
@@ -21,6 +22,44 @@ use crate::{
 
 const PIPE_CONNECT_FAILED: &str = "Could not connect to the worker process's pipe.";
 
+#[cfg(linux)]
+impl super::Console {
+    /// Creates a new Console object with the specified name.
+    /// 
+    /// This function is currently the only way of launching a new console.
+    /// It spawns a worker process wich waits for any messages
+    /// from the parent and then prints them.
+    /// For more information about that see [`console-worker`].
+    /// 
+    /// The console is closed automaticly when the returned `Console` is
+    /// dropped or your program exits.
+    /// 
+    /// # Examples
+    /// 
+    /// ```rust
+    /// use pipedconsole::Console;
+    /// # fn main() -> Result<(), pipedconsole::Error> {
+    /// let my_console = Console::new("My console")?; // creates a new console window
+    /// 
+    /// my_console.println("Hello world!")?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    /// 
+    /// # Technical details
+    /// 
+    /// This method creates a worker process using the [CreateProcess] function from `winapi`
+    /// and then obtains a handle to the pipe by calling the [CreateFile] function.
+    /// For more information about the information in returned errors see [`crate::Error`]: pipedconsole::Error .
+    /// 
+    /// [CreateProcess]: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
+    /// [CreateFile]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
+    pub fn new(name: &str) -> Result<Self, crate::Error> {
+        Console { pid: 0, pipe: 0 as *mut c_void }
+    }
+}
+
+#[cfg(windows)]
 impl super::Console {
     /// Creates a new Console object with the specified name.
     /// 

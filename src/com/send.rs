@@ -5,7 +5,7 @@ use winapi::um::{fileapi::WriteFile, errhandlingapi::GetLastError};
 use std::ffi::{CString, c_void};
 use crate::error::InternalError;
 
-#[cfg(linux)]
+#[cfg(not(windows))]
 pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<(), InternalError> {
     Ok(())
 }

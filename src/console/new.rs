@@ -22,7 +22,7 @@ use crate::{
 
 const PIPE_CONNECT_FAILED: &str = "Could not connect to the worker process's pipe.";
 
-#[cfg(linux)]
+#[cfg(not(windows))]
 impl super::Console {
     /// Creates a new Console object with the specified name.
     /// 

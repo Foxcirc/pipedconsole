@@ -5,7 +5,7 @@ use winapi::um::handleapi::CloseHandle;
 /// Closes the handle to the pipe.
 /// When the handle is closed, the worker
 /// process will automaticly exit.
-#[cfg(linux)]
+#[cfg(not(windows))]
 impl Drop for super::Console {
     fn drop(&mut self) { }
 }

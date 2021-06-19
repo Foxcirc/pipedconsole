@@ -5,7 +5,7 @@ use winapi::um::{fileapi::ReadFile, errhandlingapi::GetLastError};
 use std::ffi::c_void;
 use crate::error::InternalError;
 
-#[cfg(linux)]
+#[cfg(not(windows))]
 pub(crate) unsafe fn receive(pipe_handle: *mut c_void, buffer: *mut i8, bytes_to_read: u32) -> Result<u32, InternalError> {
     Ok(0)
 }

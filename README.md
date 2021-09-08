@@ -34,18 +34,14 @@ Download the crate either directly through Cargo or visit [crates.io].
 
 More documentation can be found on [docs.rs].
 
-# Why so many versions?
+# Changelog
 
-There were some problems getting docs.rs to work correctly, as this is my first
-crate and I had no experience with documentation etc. in rust.
+## 0.2.0 -> 0.2.3
+New system for building the `console_worker` executable.
+It is easier to use and comes with auto detection for the executable.
 
-Every time publishing a version I was sure to have fixed the problems that come
-with docs.rs and winapi crates. It turns out it took me 5 trys to get it working
-correctly...
-
-While you _can_ use any version of this crate, the newer versions contains some
-documentation improvements and spelling corrections.
-Overall there aren't any bigger differences between 0.1.0 -> 0.2.0
+## 0.0.0 -> 0.2.0
+Got docs.rs to work correctly.
 
 [docs.rs]: https://docs.rs
 [crates.io]: https://crates.io

@@ -43,7 +43,7 @@ fn main() {
                 }
             };
             // todo could this be triggered by something else (like a weird path)?
-            if out.contains("error") || out.contains("warning") { //* an error occured
+            if out.contains("error: ") || out.contains("warning: ") { //* an error occured
                 println!("cargo:warning=during the compilation of the console_worker executable cargo has thrown an error: {}", out);
             }
         },

@@ -131,42 +131,76 @@ impl super::Console {
 
             startup_info.cb = std::mem::size_of_val(&startup_info) as u32;
             
+            // The file is "next to" the executable inside the directory tree
             let mut process_name = match std::env::current_exe() {
                 Ok(v) => v,
                 Err(e) => return Err( crate::Error { message: format!("Could not get the current executable's path: {}", e), kind: ErrorKind::Error, code: GetLastError() } )
             };
+            // The file is in the default location where cargo will put the executable.
+            let mut process_name_alt = process_name.clone();
 
             process_name.pop();
             process_name.push("console_worker.exe");
-            
+
             let process_name = match process_name.to_str() {
                 Some(v) => v,
                 None => return Err( InternalError::StringError.into() )
             };
-
+            
             let process_name = match CString::new(process_name) {
                 Ok(v) => v.into_raw(),
                 Err(_) => return Err( InternalError::StringError.into() )
             };
-
-            // Create the worker process.
-            w_ptapi::CreateProcessA(
-                process_name,
-                null_mut(),
-                null_mut::<w_mbase::SECURITY_ATTRIBUTES>(), 
-                null_mut::<w_mbase::SECURITY_ATTRIBUTES>(),
-                0,
-                w_base::NORMAL_PRIORITY_CLASS | w_base::CREATE_NEW_CONSOLE, 
-                null_mut::<std::ffi::c_void>(),
-                null_mut::<i8>(),
-                &mut startup_info,
-                &mut process_info
-            );
+            
+            Self::spawn(process_name, &mut startup_info, &mut process_info);
             
             let result = GetLastError();
             match result {
                 0 => (),
-                2..=3 => return Err( crate::Error { message: "File not found! Place 'console_worker.exe' in the same directory as the calling executable.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ),
+                2..=3 => {
+                    // Try the alternative path.
+                    
+                    process_name_alt.pop();
+                    process_name_alt.push("build");
+                    let contents = match std::fs::read_dir(&process_name_alt) {
+                        Ok(v) => v,
+                        Err(_) => return Err( crate::Error { message: "File not found! Place 'console_worker.exe' in the same directory as the calling executable.".into(), kind: ErrorKind::Fatal, code: GetLastError() } )
+                    };
+
+                    // Get if there is a directory inside "build" wich contains an "out" folder. 
+                    for item in contents { 
+                        if let Ok(item) = item {
+                            let mut path = item.path();
+                            path.push("out");
+                            if path.exists() {
+                                process_name_alt = path;
+                            }
+                        }
+                    }
+
+                    process_name_alt.push("debug");
+                    process_name_alt.push("console_worker.exe");
+                    
+                    let process_name_alt = match process_name_alt.to_str() {
+                        Some(v) => v,
+                        None => return Err( InternalError::StringError.into() )
+                    };
+
+                    let process_name_alt = match CString::new(process_name_alt) {
+                        Ok(v) => v.into_raw(),
+                        Err(_) => return Err( InternalError::StringError.into() )
+                    };
+
+                    Self::spawn(process_name_alt, &mut startup_info, &mut process_info);
+
+                    let result = GetLastError();
+                    match result {
+                        0 => (),
+                        2..=3 => { return Err( crate::Error { message: "File not found! Place 'console_worker.exe' in the same directory as the calling executable.".into(), kind: ErrorKind::Fatal, code: GetLastError() } ) },
+                        _ => return Err( crate::Error { message: "The worker process could not be launched.".into(), kind: ErrorKind::Error, code: GetLastError() } )
+                    }
+   
+                },
                 _ => return Err( crate::Error { message: "The worker process could not be launched.".into(), kind: ErrorKind::Error, code: GetLastError() } )
             };
 
@@ -214,5 +248,23 @@ impl super::Console {
             } )
         }
     }
+
+    /// Spawn a new console process.
+    unsafe fn spawn(process_name: *mut i8, startup_info: &mut w_ptapi::STARTUPINFOA, process_info: &mut w_ptapi::PROCESS_INFORMATION) {
+            // Create the worker process.
+            w_ptapi::CreateProcessA(
+                process_name,
+                null_mut(),
+                null_mut::<w_mbase::SECURITY_ATTRIBUTES>(), 
+                null_mut::<w_mbase::SECURITY_ATTRIBUTES>(),
+                0,
+                w_base::NORMAL_PRIORITY_CLASS | w_base::CREATE_NEW_CONSOLE, 
+                null_mut::<std::ffi::c_void>(),
+                null_mut::<i8>(),
+                startup_info,
+                process_info
+            );
+    }
+
 }
 

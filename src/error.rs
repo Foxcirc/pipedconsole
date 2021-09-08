@@ -55,8 +55,8 @@ impl From<InternalError> for ConsoleError {
         match v {
             InternalError::StringError => ConsoleError { message: "There was an error converting strings. Try to use only valid utf-8 characters.".into(), kind: ErrorKind::Error, code: 0 },
             InternalError::FaultyWrite { expected: e, result: r} => ConsoleError { message: format!("The data is invalid. (Expected {} bytes but got {}.)", e, r), kind: ErrorKind::Warning, code: 0 },
-            InternalError::InvalidHandle => ConsoleError { message: "The (pipe) handle is invalid.".into(), kind: ErrorKind::Fatal, code: 2 },
-            InternalError::PipeBroken => ConsoleError { message: "The pipe to the worker process was closed.".into(), kind: ErrorKind::Fatal, code: 232 },
+            InternalError::InvalidHandle => ConsoleError { message: "The (pipe) handle is invalid.".into(), kind: ErrorKind::Error, code: 2 },
+            InternalError::PipeBroken => ConsoleError { message: "The pipe to the worker process was closed.".into(), kind: ErrorKind::Error, code: 232 },
             InternalError::MoreData => ConsoleError { message: "The last message could not be read completely.".into(), kind: ErrorKind::Warning, code: 234 },
             InternalError::OsError(e) => ConsoleError { message: format!("Windows error {}.", e), kind: ErrorKind::Error, code: e },
         }

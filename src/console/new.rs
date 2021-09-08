@@ -193,6 +193,7 @@ impl super::Console {
 
                     Self::spawn(process_name_alt, &mut startup_info, &mut process_info);
 
+                    panic!();
                     let result = GetLastError();
                     match result {
                         0 => (),

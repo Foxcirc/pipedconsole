@@ -9,7 +9,7 @@ documentation = "https://docs.rs/pipedconsole"
 readme = "README.md"
 
 authors = ["foxcirc"]
-version = "0.2.3"
+version = "0.3.0"
 edition = "2018"
 
 license = "MIT"

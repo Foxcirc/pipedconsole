@@ -43,21 +43,28 @@
 //! This script is important because cargo does not build binaries inside library crates, so
 //! it needs to be done manually.
 //! 
-//! If the build script runs for the first time, it will display an error message. This is intended!
+//! If the build script runs for the first time, it will display an info message.
 //! 
-//! ** Please copy the `console_worker.exe` file into the directory where the executable
-//! calling `Console::new()` is located. ** This is likely `your_dir\target\debug` or `your_dir\target
-//! \release` when building in release mode. 
+//! The path system works as follws:
 //! 
-//! If you are done copying, you can disable the error by:
-//! - Setting the `PIPEDCONSOLE_COPY_DONE` environment variable.
-//! - Creating a specific file. (see below)
+//! 1. The script trys to find the `console_worker` executable **next to** the currently running one.
+//!    This will always work, if you put `console_worker.exe` into the same folder as any executable calling Console::new().
+//! 2. If it cant find the executable, it tries to find it at the default path cargo will put it when you build normally.
+//!    This only works inside the default cargo project structure.
 //! 
-//! ** More inforation about the paths (E.g. where to create the file^^) is included in the error message. **
+//! If you want to move you executable, you will have to find `console_worker.exe` on your computer.
+//! For more information on where you can find it, run the build script again with the `PIPED_CONSOLE_HELP`
+//! environment variable set.
 //! 
-//! If you experience any issues with the system or have any ideas how to improve it, to make it more
-//! convenient to use, please create a feature request or pull request on `github` using the `build script
-//! improvement` template.
+//! If you use `cmd`:
+//! 
+//! ```
+//! set PIPED_CONSOLE_HELP=TRUE
+//! cargo clean
+//! cargo build 
+//! ``` 
+//! 
+//! This will display a message on where the `console_worker` executable is located.
 //! 
 //! # Additional Information
 //! 

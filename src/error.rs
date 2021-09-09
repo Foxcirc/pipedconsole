@@ -9,7 +9,7 @@ pub enum ErrorKind {
     /// Various errors wich aren't really common, but can be fatal. (eg. CString::new() failure)
     Error,
     /// The `Console` cannot be used anymore and is useless. 
-    /// If you get this kind of error from the [`crate::Console::new()`] function, it is likely
+    /// If you get this kind of error from the `Console::new` function, it is likely
     /// you will not be able to create a Console in the future as well.
     Fatal,
 }
@@ -53,12 +53,38 @@ pub(crate) enum InternalError {
 impl From<InternalError> for ConsoleError {
     fn from(v: InternalError) -> ConsoleError {
         match v {
-            InternalError::StringError => ConsoleError { message: "There was an error converting strings. Try to use only valid utf-8 characters.".into(), kind: ErrorKind::Error, code: 0 },
+            InternalError::StringError => ConsoleError { message: "There was an error converting strings. Try to use only valid utf-8 characters.".into(), kind: ErrorKind::Fatal, code: 0 },
             InternalError::FaultyWrite { expected: e, result: r} => ConsoleError { message: format!("The data is invalid. (Expected {} bytes but got {}.)", e, r), kind: ErrorKind::Warning, code: 0 },
-            InternalError::InvalidHandle => ConsoleError { message: "The (pipe) handle is invalid.".into(), kind: ErrorKind::Error, code: 2 },
-            InternalError::PipeBroken => ConsoleError { message: "The pipe to the worker process was closed.".into(), kind: ErrorKind::Error, code: 232 },
+            InternalError::InvalidHandle => ConsoleError { message: "The (pipe) handle is invalid.".into(), kind: ErrorKind::Fatal, code: 2 },
+            InternalError::PipeBroken => ConsoleError { message: "The pipe to the worker process was closed.".into(), kind: ErrorKind::Fatal, code: 232 },
             InternalError::MoreData => ConsoleError { message: "The last message could not be read completely.".into(), kind: ErrorKind::Warning, code: 234 },
             InternalError::OsError(e) => ConsoleError { message: format!("Windows error {}.", e), kind: ErrorKind::Error, code: e },
         }
     }
 }
+
+impl From<InternalError> for std::io::Error {
+    fn from(err: InternalError) -> std::io::Error {
+
+        match err {
+            InternalError::StringError => std::io::Error::from(std::io::ErrorKind::Other),
+            InternalError::FaultyWrite { .. } => std::io::Error::from(std::io::ErrorKind::InvalidData),
+            InternalError::PipeBroken => std::io::Error::from(std::io::ErrorKind::BrokenPipe),
+            InternalError::MoreData => std::io::Error::from(std::io::ErrorKind::Other),
+            InternalError::InvalidHandle => std::io::Error::from(std::io::ErrorKind::Other),
+            InternalError::OsError(code) => std::io::Error::from_raw_os_error(code as i32),
+        }
+
+    }
+}
+
+impl From<ConsoleError> for std::io::Error {
+    fn from(err: ConsoleError) -> std::io::Error {
+
+        match err {
+            _ => return std::io::Error::from(std::io::ErrorKind::Other)
+        }
+
+    }
+}
+

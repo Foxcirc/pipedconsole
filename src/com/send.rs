@@ -6,14 +6,14 @@ use std::ffi::{CString, c_void};
 use crate::error::InternalError;
 
 #[cfg(not(windows))]
-pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<(), InternalError> {
-    Ok(())
+pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<u32, InternalError> {
+    Ok(0)
 }
 
 // This code is used.
 #[allow(dead_code)]
 #[cfg(windows)]
-pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<(), InternalError> {
+pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<u32, InternalError> {
 
     let mut bytes_written = 0;
     let bytes_to_write = message.len() as u32;
@@ -37,7 +37,7 @@ pub(crate) unsafe fn send(pipe_handle: *mut c_void, message: String) -> Result<(
 
     if bytes_to_write != bytes_written { return Err(InternalError::FaultyWrite{ expected: bytes_to_write, result: bytes_written } ) } 
 
-    Ok(())
+    Ok(bytes_written)
 }
 
 

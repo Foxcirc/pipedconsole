@@ -20,11 +20,12 @@ impl super::Console {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn print<T: ToString>(&self, message: T) -> Result<(), crate::Error> { 
+    pub fn print<T: ToString>(&self, message: T) -> Result<usize, crate::Error> { 
 
         let mut message = message.to_string();
         message.push('2');
 
-        unsafe { Ok(send(self.pipe, message)?) }
+        let written = unsafe { send(self.pipe, message)? };
+        Ok(written as usize)
     }
 }

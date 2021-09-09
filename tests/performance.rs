@@ -2,6 +2,7 @@
 
 use pipedconsole::*;
 use std::time::Instant;
+use std::io::Write;
 
 const TEST_RANGE: u32 = 100_000;
 const TEST_RANGE_SMALL: u32 = 500;
@@ -25,7 +26,7 @@ fn template() {
 #[test]
 fn perf_flush() {
     
-    let console = Console::new("PERF_FLUSH").unwrap();
+    let mut console = Console::new("PERF_FLUSH").unwrap();
     console.flush().unwrap();// warmup
     
     let start = Instant::now();

@@ -45,7 +45,7 @@ More documentation can be found on [docs.rs].
   *Note: The documentation on the root page is slightly wrong in this version.*
 
 ## 0.0.0 -> 0.2.0
-Got docs.rs to work correctly.
+- Got docs.rs to work correctly.
 
 [docs.rs]: https://docs.rs/pipedconsole
 [crates.io]: https://crates.io/crates/pipedconsole

@@ -37,12 +37,8 @@ pub(crate) mod write;
 /// 
 /// # Threads
 /// 
-/// Currently this struct does not implement Send or Sync and there is no
-/// way of connecting to an already existing console, however this will
-/// be added in future versions.
+/// You can safely move a console to another thread.
 /// 
-/// **Do not try to send this struct across threads in any way.** The handle to
-/// the pipe wich is owned by a [`Console`] can currently be inherited.
 #[derive(Debug, Clone)]
 pub struct Console {
     /// The process id of the worker process. You can use this to further interface with
@@ -52,3 +48,5 @@ pub struct Console {
     pub pid: u32,
     pipe: *mut std::ffi::c_void,
 }
+
+unsafe impl Send for Console {}

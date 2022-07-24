@@ -205,6 +205,7 @@ fn console_clone() {
 #[test]
 fn console_other_thread() {
 
+    
     std::thread::spawn(move || {
         
         let console = Console::new("TEST_OTHER_THREAD").unwrap();

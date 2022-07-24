@@ -225,8 +225,8 @@ impl super::Console {
             };
 
             // Retake ownership of the CStrings so they can be deallocated.
-            CString::from_raw(process_name);
-            CString::from_raw(startup_info.lpTitle);
+            drop(CString::from_raw(process_name));
+            drop(CString::from_raw(startup_info.lpTitle));
 
             let pipe_name = match CString::new(r"\\.\pipe\pipedconsole-%PID".replace("%PID", &process_info.dwProcessId.to_string())) {
                 Ok(v) => v,

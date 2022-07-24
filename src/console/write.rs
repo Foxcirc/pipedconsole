@@ -1,11 +1,11 @@
 
 use std::io;
-use crate::com::{send::send, /* receive::receive */};
+use crate::com::{send::{send, sendc, sendstr}, /* receive::receive */};
 
 impl io::Write for crate::Console {
     /// Prints the data to the console.
     /// The data must be valid utf-8, otherwise `ErrorKind::InvalidInput` will be returned.
-    /// If an internal error is generated, `ErrorKind::InvalidData` will be retuend.
+    /// If an internal error is generated, `ErrorKind::InvalidData` may be retuend.
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let string = match String::from_utf8(buf.to_vec()) {
             Ok(v) => v,
@@ -42,7 +42,8 @@ impl io::Write for crate::Console {
     /// ```
     fn flush(&mut self) -> io::Result<()> { 
         
-        unsafe { send(self.pipe, "1".into())?; }
+        unsafe { sendc(self.pipe, 1)?; }
+        unsafe { sendstr(self.pipe, String::new())? };
         Ok(())
     
     }

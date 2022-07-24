@@ -1,3 +1,4 @@
+use core::panic;
 use std::process::Command;
 
 fn main() {
@@ -24,7 +25,7 @@ fn main() {
                         options work for you. \
         ", 
         &out_dir
-    ); return }
+    ); panic!() }
 
     //* otherwise build the console-worker executable
     match Command::new("cargo").args(&["build", "--bin", "console_worker", "--target-dir", &out_dir]).output() {

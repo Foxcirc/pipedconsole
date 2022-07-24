@@ -35,7 +35,7 @@ impl super::Console {
             let len = receive(self.pipe, buffer.as_mut_ptr(), 1024)?;
 
             match CStr::from_ptr(buffer.as_ptr()).to_str() {
-                Ok(v) => target.push_str(&v.replace("\u{0011}", "")),
+                Ok(v) => target.push_str(v),
                 Err(_) => return Err( InternalError::StringError.into() )
             };
 

@@ -35,6 +35,11 @@ More documentation can be found on [docs.rs].
 
 # Changelog
 
+## 0.3.0 -> 0.3.1
+- Rewrote the message passing system
+- Improved documentation
+- Minor bug fixes for the build help messages
+
 ## 0.2.3 -> 0.3.0
 - Implemented `std::io::Write` for console. This means the `flush` method is now part of that trait.
 - Fixed documentation.

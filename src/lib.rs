@@ -74,7 +74,8 @@
 //! 
 //! In order to interface to a console-worker process using another language etc. you can
 //! manually launch it and then connect to the named pipe wich is created. For more
-//! information about this see the `worker` documentation.
+//! information about this see the `worker` documentation inside the repository.
+//! You can find the worker binary files at `/src/bin/console_worker/main.rs`
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/console/allocconsole
 

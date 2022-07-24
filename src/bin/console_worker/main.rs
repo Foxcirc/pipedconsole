@@ -25,13 +25,17 @@
 //! If you want to controll this process manually you need to send it
 //! specifiy commands after you've connected to the pipe.
 //! 
-//! You can append specific characters at the end of your message,
-//! depending on what character is found the program will do different
-//! things:
-//! - '0' will be ignored without an error
-//! - '1' will flush the `stdout` buffer
-//! - '2' will print the message without a newline
-//! - '3' will read from the console and send the result back trough the named pipe // todo
+//! Each instruction to the worker process consists of two messages.
+//! 1. message: OPCODE
+//! 2. message: null-terminated string
+//! For some opcodes the 2. message can be an empty string. You must always send two messages.
+//! 
+//! ## Opcodes
+//! 
+//! - 0: ignore
+//! - 1: flush stdout
+//! - 2: print 2. message to stdout
+//! - 3: read a line and send that back through the pipe
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipes
 //! 

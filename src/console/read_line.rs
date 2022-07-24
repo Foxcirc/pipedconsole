@@ -1,5 +1,5 @@
 use crate::{
-    com::{send::{send, sendc, sendstr}, receive::receive},
+    com::{send::{sendc, sendstr}, receive::receive},
     error::InternalError
 };
 use std::ffi::CStr;

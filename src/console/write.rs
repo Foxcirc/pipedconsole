@@ -1,6 +1,6 @@
 
 use std::io;
-use crate::com::{send::{send, sendc, sendstr}, /* receive::receive */};
+use crate::com::{send::{sendc, sendstr}, /* receive::receive */};
 
 impl io::Write for crate::Console {
     /// Prints the data to the console.

@@ -1,4 +1,4 @@
-use crate::com::send::{send, sendc, sendstr};
+use crate::com::send::{sendc, sendstr};
 
 impl super::Console {
     /// Print to the extern console.

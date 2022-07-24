@@ -1,4 +1,5 @@
 use pipedconsole::*;
+use std::io::Write;
 
 #[test]
 fn console_basic() {
@@ -84,8 +85,8 @@ const TEST_PRINT_RANGE_SMALL: usize = 10;
 #[test]
 fn console_small() {
     
-    let first = Console::new("TEST_PRINT_1").unwrap();
-    let second = Console::new("TEST_PRINT_2").unwrap();
+    let mut first = Console::new("TEST_PRINT_1").unwrap();
+    let mut second = Console::new("TEST_PRINT_2").unwrap();
 
     first.println(">").unwrap();
 
@@ -112,9 +113,9 @@ const TEST_PRINT_RANGE_SLOW: usize = 20;
 #[test]
 fn console_slow() {
 
-    let first = Console::new("TEST_PRINT_SLOW_1").unwrap();
+    let mut first = Console::new("TEST_PRINT_SLOW_1").unwrap();
     std::thread::sleep(std::time::Duration::from_millis(200));
-    let second = Console::new("TEST_PRINT_SLOW_2").unwrap();
+    let mut second = Console::new("TEST_PRINT_SLOW_2").unwrap();
     
     first.println("Slow test.").unwrap();
 
@@ -204,6 +205,7 @@ fn console_clone() {
 #[test]
 fn console_other_thread() {
 
+    
     std::thread::spawn(move || {
         
         let console = Console::new("TEST_OTHER_THREAD").unwrap();
@@ -219,7 +221,7 @@ fn console_other_thread() {
 #[test]
 fn console_read() {
 
-    let first = Console::new("TEST_READ_1").unwrap();
+    let mut first = Console::new("TEST_READ_1").unwrap();
     let second = Console::new("TEST_READ_2").unwrap();
 
     first.print("Reading from first console: ").unwrap();
@@ -250,10 +252,10 @@ fn console_pull() {
     let console = Console::new("TEST_PULL").unwrap();
 
     for _ in 0..TEST_PULL_RANGE {
-        console.print("Type here: ").unwrap();
-        // let mut buff = String::new();
-        // console.read_line(&mut buff).unwrap();
-        // println!("Result 1: {}", buff);
+        console.println("Type here: ").unwrap();
+        let mut buff = String::new();
+        console.read_line(&mut buff).unwrap();
+        println!("Result: {}", buff);
     };
 
     println!("End of test!");

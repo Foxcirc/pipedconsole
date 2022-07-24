@@ -37,33 +37,45 @@
 //! When the console object is dropped or the calling program exits, the console
 //! will close automaticly, unless another process also writes to it.
 //! 
-//! # Importand
+//! # Important
 //! This crate comes with a build script wich tries to compile the `console_worker` executable.
+//! You need to have the `cargo` command usable in order for it to work.
 //! This script is important because cargo does not build binaries inside library crates, so
 //! it needs to be done manually.
 //! 
-//! If the build script has succesfully built the `console_worker` binary, it will display
-//! a warning wich contains the file location of the executable and some other useful information.
+//! If the build script runs for the first time, it will display an info message.
 //! 
-//! ** Please copy the `console_worker.exe` file into the directory where the executable(s) wich is(are)
-//! calling `Console::new()` are located. ** This is likely `your_dir\target\debug` or `your_dir\target
-//! \release` when building in release mode. You can disable the warning by specifying the `PCAUTOCOPY`
-//! environment variable.
-//! - `set PCAUTOCOPY=ignore` will disable the warning. Do this after copying the file manually.
-//! - `set PCAUTOCOPY=path/to/your/target/dir` will make the build script copy the `console_worker.exe` file into the specified directory.
+//! The path system works as follws:
 //! 
-//! If you experience any issues with the system or have any ideas how to improve it, to make it more
-//! convenient to use, please create a feature request or pull request in `github`.
+//! 1. The script trys to find the `console_worker` executable **next to** the currently running one.
+//!    This will always work, if you put `console_worker.exe` into the same folder as any executable calling Console::new().
+//! 2. If it cant find the executable, it tries to find it at the default path cargo will put it when you build normally.
+//!    This only works inside the default cargo project structure.
+//! 
+//! If you want to move you executable, you will have to find `console_worker.exe` on your computer.
+//! For more information on where you can find it, run the build script again with the `PIPED_CONSOLE_HELP`
+//! environment variable set.
+//! 
+//! If you use `cmd`:
+//! 
+//! ```
+//! set PIPED_CONSOLE_HELP=TRUE
+//! cargo clean
+//! cargo build 
+//! ``` 
+//! 
+//! This will display a message on where the `console_worker` executable is located.
 //! 
 //! # Additional Information
 //! 
 //! Creating a new [`Console`] **will create a new seperate process**. That means you will
-//! see a "console-worker" process in your task manager. That process is just the console
+//! see a "console_worker" process in your task manager. That process is just the console
 //! listening for commands to execute.
 //! 
 //! In order to interface to a console-worker process using another language etc. you can
 //! manually launch it and then connect to the named pipe wich is created. For more
-//! information about this see the `worker` documentation.
+//! information about this see the `worker` documentation inside the repository.
+//! You can find the worker binary files at `/src/bin/console_worker/main.rs`
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/console/allocconsole
 

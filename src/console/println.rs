@@ -18,7 +18,8 @@ impl super::Console {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn println<T: ToString>(&self, message: T) -> Result<(), ConsoleError> { 
-        self.print(message.to_string() + "\n")
+    pub fn println<T: ToString>(&self, message: T) -> Result<usize, ConsoleError> { 
+        let written = self.print(message.to_string() + "\n")?;
+        Ok(written as usize)
     }
 }

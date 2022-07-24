@@ -31,10 +31,27 @@ println!("Your name is: {}", name); // main processe's console
 # Documentation and download
 
 Download the crate either directly through Cargo or visit [crates.io].
-
 More documentation can be found on [docs.rs].
 
+# Changelog
 
-[docs.rs]: https://docs.rs
-[crates.io]: https://crates.io
+## 0.3.0 -> 0.3.1
+- Rewrote the message passing system
+- Improved documentation
+- Minor bug fixes for the build help messages
+
+## 0.2.3 -> 0.3.0
+- Implemented `std::io::Write` for console. This means the `flush` method is now part of that trait.
+- Fixed documentation.
+
+## 0.2.0 -> 0.2.3
+- New system for building the `console_worker` executable.
+  It is easier to use and comes with auto detection for the executable.
+  *Note: The documentation on the root page is slightly wrong in this version.*
+
+## 0.0.0 -> 0.2.0
+- Got docs.rs to work correctly.
+
+[docs.rs]: https://docs.rs/pipedconsole
+[crates.io]: https://crates.io/crates/pipedconsole
 [microsoft docs]: https://docs.microsoft.com/en-us/windows/console/allocconsole

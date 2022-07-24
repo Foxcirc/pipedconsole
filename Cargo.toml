@@ -1,14 +1,15 @@
 [package]
 name = "pipedconsole"
 
-description = "A rust crate for managing multiple consoles from one windows application (process)."
+description = "Easily manage multiple windows consoles from one single process."
 keywords = ["win32", "winapi", "windows", "console", "terminal"]
-categories = ["command-line-utilities", "command-line-interface", "accessibility"]
+categories = ["command-line-interface", "accessibility"]
 repository = "https://github.com/Foxcirc/pipedconsole"
+documentation = "https://docs.rs/pipedconsole"
 readme = "README.md"
 
 authors = ["foxcirc"]
-version = "0.0.1"
+version = "0.3.0"
 edition = "2018"
 
 license = "MIT"

@@ -1,4 +1,4 @@
-use crate::com::send::send;
+use crate::com::send::{sendc, sendstr};
 
 impl super::Console {
     /// Print to the extern console.
@@ -20,11 +20,10 @@ impl super::Console {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn print<T: ToString>(&self, message: T) -> Result<(), crate::Error> { 
+    pub fn print<T: ToString>(&self, message: T) -> Result<usize, crate::Error> { 
 
-        let mut message = message.to_string();
-        message.push('2');
-
-        unsafe { Ok(send(self.pipe, message)?) }
+        unsafe { sendc(self.pipe, 2)? };
+        let written = unsafe { sendstr(self.pipe, message.to_string())? };
+        Ok(written as usize)
     }
 }

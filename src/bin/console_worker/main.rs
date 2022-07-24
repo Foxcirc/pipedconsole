@@ -25,13 +25,17 @@
 //! If you want to controll this process manually you need to send it
 //! specifiy commands after you've connected to the pipe.
 //! 
-//! You can append specific characters at the end of your message,
-//! depending on what character is found the program will do different
-//! things:
-//! - '0' will be ignored without an error
-//! - '1' will flush the `stdout` buffer
-//! - '2' will print the message without a newline
-//! - '3' will read from the console and send the result back trough the named pipe // todo
+//! Each instruction to the worker process consists of two messages.
+//! 1. message: OPCODE
+//! 2. message: null-terminated string
+//! For some opcodes the 2. message can be an empty string. You must always send two messages.
+//! 
+//! ## Opcodes
+//! 
+//! - 0: ignore
+//! - 1: flush stdout
+//! - 2: print 2. message to stdout
+//! - 3: read a line and send that back through the pipe
 //! 
 //! [microsoft docs]: https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipes
 //! 
@@ -64,7 +68,8 @@ use winapi::{
 };
 use std::{
     ptr::null_mut,
-    io::Write
+    io::Write,
+    ffi::CStr,
 };
 use com::{receive::*, send::*};
 use error_functions::{error, warning};
@@ -102,15 +107,13 @@ fn main () {
         let result = GetLastError();
         if result != 0 && result != 535 { error("Could not connect to client. (error {})", result); };
         
-        // Receives the data send through the pipe.
-        let message = std::ffi::CString::new([17 as u8; 1024]).unwrap().into_raw();
-        let mut controll: char;
         
         loop {
             
-            std::ptr::write_bytes(message, 17, 1024);
+            // get the controll code
+            let mut code: i8 = 0;
 
-            match receive(pipe_handle, message, 1024) {
+            match receive(pipe_handle, &mut code, 1) {
                 Ok(_) => (),
                 Err(InternalError::MoreData) => (),
                 Err(InternalError::PipeBroken) => break,
@@ -118,29 +121,32 @@ fn main () {
                 _ => unreachable!("receive returned something wrong")
             };
             
-            let mut command = std::ffi::CStr::from_ptr(message)
-                .to_str()
-                .unwrap_or_else(|_| error("The message does not contain valid utf-8.", ""))
-                .replace("\u{0011}", "");
+            let mut raw = [0i8; 1024];
             
-            if command.len() <= 0 { continue; }
+            match receive(pipe_handle, raw.as_mut_ptr(), 1024) {
+                Ok(len) => len,
+                Err(InternalError::MoreData) => 1024,
+                Err(InternalError::PipeBroken) => break,
+                Err(InternalError::OsError(e)) => error("Os error {}", e),
+                _ => unreachable!("receive returned something wrong")
+            };
             
-            controll = command.pop().unwrap();
-            match controll {
-                '0' => continue,
-                '1' => std::io::stdout().flush().unwrap_or_else(|e| warning("Could not flush stdout.", e)),
-                '2' => std::io::stdout().write_all(command.as_bytes()).unwrap_or_else(|e| warning("Could not write to stdout. ({})", e)),
-                '3' => {
+            
+            let message = CStr::from_ptr(raw.as_ptr());
+
+            match code {
+                0 => continue,
+                1 => std::io::stdout().flush().unwrap_or_else(|e| warning("Could not flush stdout.", e)),
+                2 => std::io::stdout().write_all(message.to_bytes()).unwrap_or_else(|e| warning("Could not write to stdout. ({})", e)),
+                3 => {
                     let mut buffer = String::new();
                     std::io::stdin().read_line(&mut buffer).unwrap_or_else(|e| { warning("Could not read line into buffer. ({})", e); 0 });
-                    send(pipe_handle, buffer).unwrap_or_else(|e| error(&format!("Could not send response to a \"read\" command: {:?}", e), "")); // error() can't format with Debug
+                    sendstr(pipe_handle, buffer).unwrap_or_else(|e| error(&format!("Could not send response to a \"read\" command: {:?}", e), ""));
                 },
-                _ => warning("Invalid controll character: ", controll)
+                _ => warning("Invalid controll character: {}", code)
             }
 
         }
-
-        std::ffi::CString::from_raw(message);
 
     }
 }

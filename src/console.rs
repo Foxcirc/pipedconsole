@@ -2,8 +2,9 @@ pub(crate) mod drop;
 pub(crate) mod new;
 pub(crate) mod print;
 pub(crate) mod println;
-pub(crate) mod flush;
 pub(crate) mod read_line;
+pub(crate) mod read;
+pub(crate) mod write;
 
 /// Used for printing and reading from an external console.
 /// 
@@ -36,12 +37,9 @@ pub(crate) mod read_line;
 /// 
 /// # Threads
 /// 
-/// Currently this struct does not implement Send or Sync and there is no
-/// way of connecting to an already existing console, however this will
-/// be added in future versions.
+/// A `Console` cannot be send between threads safely, as that would create
+/// raceconditions with the worker process.
 /// 
-/// **Do not try to send this struct across threads in any way.** The handle to
-/// the pipe wich is owned by a [`Console`] can currently be inherited.
 #[derive(Debug, Clone)]
 pub struct Console {
     /// The process id of the worker process. You can use this to further interface with
@@ -49,5 +47,5 @@ pub struct Console {
     /// it is closed "correctly" even if it get's stuck, although that souldn't happen under
     /// normal conditions.
     pub pid: u32,
-    pipe: winapi::um::winnt::HANDLE,
+    pipe: *mut std::ffi::c_void,
 }

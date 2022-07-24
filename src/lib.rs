@@ -45,14 +45,15 @@
 //! 
 //! If the build script runs for the first time, it will display an info message.
 //! 
-//! The path system works as follws:
+//! When you run your program, a call to `Console::new` will do the following:
 //! 
-//! 1. The script trys to find the `console_worker` executable **next to** the currently running one.
+//! 1. It trys to find the `console_worker` executable **in the same directory** as the currently running one.
 //!    This will always work, if you put `console_worker.exe` into the same folder as any executable calling Console::new().
 //! 2. If it cant find the executable, it tries to find it at the default path cargo will put it when you build normally.
-//!    This only works inside the default cargo project structure.
+//!    This only works inside the default cargo project structure and makes it easier to just use this crate as-is.
 //! 
-//! If you want to move you executable, you will have to find `console_worker.exe` on your computer.
+//! If you want to move your executable and run it in a new directory because of some reason,
+//! you will have to find `console_worker.exe` on your computer.
 //! For more information on where you can find it, run the build script again with the `PIPED_CONSOLE_HELP`
 //! environment variable set.
 //! 
@@ -64,7 +65,7 @@
 //! cargo build 
 //! ``` 
 //! 
-//! This will display a message on where the `console_worker` executable is located.
+//! This should display a message on where the `console_worker` executable is located.
 //! 
 //! # Additional Information
 //! 

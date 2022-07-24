@@ -37,7 +37,8 @@ pub(crate) mod write;
 /// 
 /// # Threads
 /// 
-/// You can safely move a console to another thread.
+/// A `Console` cannot be send between threads safely, as that would create
+/// raceconditions with the worker process.
 /// 
 #[derive(Debug, Clone)]
 pub struct Console {
@@ -48,5 +49,3 @@ pub struct Console {
     pub pid: u32,
     pipe: *mut std::ffi::c_void,
 }
-
-unsafe impl Send for Console {}
